@@ -1,4 +1,11 @@
-easy
-medium
-hard
-veryhard
+easy:csharp
+easy:js
+easy:python
+easy:cpp
+easy:c
+easy:ruby
+easy:lua
+easy:bat
+easy:asm
+easy:perl
+easy:powershell
