@@ -26,7 +26,8 @@ public static class MinigameMenu
             ShowCur();
 
             string c = Console.ReadLine() ?? "";
-            if (c == "1" || c == "2") { Console.Write(Yel + "  [not ported yet - coming next]" + Rst); Thread.Sleep(1200); }
+            if (c == "1") new CodeRunner().Run();
+            else if (c == "2") new DiceArena().Run();
             else if (c == "3") new Reactor().Run();
             else if (c == "4") break;
             else { Console.Write(Red + "  invalid selection, operator." + Rst); Thread.Sleep(900); }
