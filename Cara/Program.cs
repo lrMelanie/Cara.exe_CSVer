@@ -29,8 +29,19 @@ internal static class Program
             Console.Write(">> ");
             string command = Console.ReadLine() ?? string.Empty;
 
+            if (command.StartsWith("schedule ", StringComparison.Ordinal))
+            {
+                assistant.ProcessScheduleCommand(command["schedule ".Length..]);
+                continue;
+            }
+
             switch (command)
             {
+                case "schedule":
+                    assistant.ShowScheduleHelp();
+                    assistant.Log("Generated schedule help");
+                    break;
+
                 case "help":
                     assistant.ShowHelp();
                     assistant.Log("Generated help");
