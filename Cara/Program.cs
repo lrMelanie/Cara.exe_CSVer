@@ -58,8 +58,10 @@ internal static class Program
                     break;
 
                 case "minigame":
-                    Console.WriteLine("[minigames not ported yet]");
-                    assistant.Log("Minigame requested (stub)");
+                    assistant.Log("Launching minigame");
+                    Cara.Minigames.MinigameMenu.Run();
+                    ShowLogotype();
+                    assistant.ShowHelp();
                     break;
 
                 case "exit":

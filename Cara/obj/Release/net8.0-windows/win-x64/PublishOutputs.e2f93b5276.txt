@@ -1,0 +1,51 @@
+C:\Lobotomia\Cara.exe[C#VER]\publish\Cara.pdb
+C:\Lobotomia\Cara.exe[C#VER]\publish\resources\data\docs\Dokumentacja.txt
+C:\Lobotomia\Cara.exe[C#VER]\publish\resources\data\docs\mono.txt
+C:\Lobotomia\Cara.exe[C#VER]\publish\resources\data\docs\PseudoDokumentacja.txt
+C:\Lobotomia\Cara.exe[C#VER]\publish\resources\data\docs\todo.txt
+C:\Lobotomia\Cara.exe[C#VER]\publish\resources\data\fileVerify1.txt
+C:\Lobotomia\Cara.exe[C#VER]\publish\resources\data\fileVerify2.txt
+C:\Lobotomia\Cara.exe[C#VER]\publish\resources\data\minigame\coderunner\coderunner_alpha.exe
+C:\Lobotomia\Cara.exe[C#VER]\publish\resources\data\minigame\coderunner\hscore.txt
+C:\Lobotomia\Cara.exe[C#VER]\publish\resources\data\minigame\coderunner\og_repository1.txt
+C:\Lobotomia\Cara.exe[C#VER]\publish\resources\data\minigame\coderunner\og_repository2.txt
+C:\Lobotomia\Cara.exe[C#VER]\publish\resources\data\minigame\coderunner\og_repository3.txt
+C:\Lobotomia\Cara.exe[C#VER]\publish\resources\data\minigame\coderunner\og_repository4.txt
+C:\Lobotomia\Cara.exe[C#VER]\publish\resources\data\minigame\coderunner\options.txt
+C:\Lobotomia\Cara.exe[C#VER]\publish\resources\data\minigame\coderunner\repository1.txt
+C:\Lobotomia\Cara.exe[C#VER]\publish\resources\data\minigame\coderunner\repository2.txt
+C:\Lobotomia\Cara.exe[C#VER]\publish\resources\data\minigame\coderunner\repository3.txt
+C:\Lobotomia\Cara.exe[C#VER]\publish\resources\data\minigame\coderunner\repository4.txt
+C:\Lobotomia\Cara.exe[C#VER]\publish\resources\data\minigame\coderunner\repository5.txt
+C:\Lobotomia\Cara.exe[C#VER]\publish\resources\data\minigame\coderunner\repository6.txt
+C:\Lobotomia\Cara.exe[C#VER]\publish\resources\data\minigame\coderunner\repository7.txt
+C:\Lobotomia\Cara.exe[C#VER]\publish\resources\data\minigame\coderunner\repository8.txt
+C:\Lobotomia\Cara.exe[C#VER]\publish\resources\data\minigame\dicearena\.gitkeep
+C:\Lobotomia\Cara.exe[C#VER]\publish\resources\data\minigame\reactor\.gitkeep
+C:\Lobotomia\Cara.exe[C#VER]\publish\resources\data\secure\guardian_angel.bat
+C:\Lobotomia\Cara.exe[C#VER]\publish\resources\data\vol1.txt
+C:\Lobotomia\Cara.exe[C#VER]\publish\resources\data\vol2.txt
+C:\Lobotomia\Cara.exe[C#VER]\publish\resources\logs\.gitkeep
+C:\Lobotomia\Cara.exe[C#VER]\publish\resources\logs\assistant.log
+C:\Lobotomia\Cara.exe[C#VER]\publish\resources\manifest\Cara.exe.manifest
+C:\Lobotomia\Cara.exe[C#VER]\publish\resources\Tools\not yet used assets\work in progress\ac_v2.3.bat
+C:\Lobotomia\Cara.exe[C#VER]\publish\resources\Tools\not yet used assets\work in progress\BlockchainIntegrity.bat
+C:\Lobotomia\Cara.exe[C#VER]\publish\resources\Tools\not yet used assets\work in progress\CCD.bat
+C:\Lobotomia\Cara.exe[C#VER]\publish\resources\Tools\not yet used assets\work in progress\donttouch.bat
+C:\Lobotomia\Cara.exe[C#VER]\publish\resources\Tools\not yet used assets\work in progress\evprecorder.bat
+C:\Lobotomia\Cara.exe[C#VER]\publish\resources\Tools\not yet used assets\work in progress\firewall.bat
+C:\Lobotomia\Cara.exe[C#VER]\publish\resources\Tools\not yet used assets\work in progress\sec.bat
+C:\Lobotomia\Cara.exe[C#VER]\publish\resources\Tools\not yet used assets\work in progress\signal_decay_monitor.bat
+C:\Lobotomia\Cara.exe[C#VER]\publish\resources\Tools\not yet used assets\work in progress\static.bat
+C:\Lobotomia\Cara.exe[C#VER]\publish\resources\Tools\not yet used assets\work in progress\Surveillance Hub.bat
+C:\Lobotomia\Cara.exe[C#VER]\publish\resources\Tools\packages\Microsoft.Windows.CppWinRT.2.0.240405.15\.signature.p7s
+C:\Lobotomia\Cara.exe[C#VER]\publish\resources\Tools\packages\Microsoft.Windows.CppWinRT.2.0.240405.15\build\native\CppWinrtRules.Project.xml
+C:\Lobotomia\Cara.exe[C#VER]\publish\resources\Tools\packages\Microsoft.Windows.CppWinRT.2.0.240405.15\build\native\Microsoft.Windows.CppWinRT.props
+C:\Lobotomia\Cara.exe[C#VER]\publish\resources\Tools\packages\Microsoft.Windows.CppWinRT.2.0.240405.15\build\native\Microsoft.Windows.CppWinRT.targets
+C:\Lobotomia\Cara.exe[C#VER]\publish\resources\Tools\packages\Microsoft.Windows.CppWinRT.2.0.240405.15\LICENSE
+C:\Lobotomia\Cara.exe[C#VER]\publish\resources\Tools\packages\Microsoft.Windows.CppWinRT.2.0.240405.15\Microsoft.Windows.CppWinRT.nuspec
+C:\Lobotomia\Cara.exe[C#VER]\publish\resources\Tools\packages\Microsoft.Windows.CppWinRT.2.0.240405.15\package\services\metadata\core-properties\b3cc741f02d24c41a4e540185eaf6fee.psmdcp
+C:\Lobotomia\Cara.exe[C#VER]\publish\resources\Tools\packages\Microsoft.Windows.CppWinRT.2.0.240405.15\readme.txt
+C:\Lobotomia\Cara.exe[C#VER]\publish\resources\Tools\packages\Microsoft.Windows.CppWinRT.2.0.240405.15\[Content_Types].xml
+C:\Lobotomia\Cara.exe[C#VER]\publish\resources\Tools\packages\Microsoft.Windows.CppWinRT.2.0.240405.15\_rels\.rels
+C:\Lobotomia\Cara.exe[C#VER]\publish\Cara.exe
