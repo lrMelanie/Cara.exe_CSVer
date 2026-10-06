@@ -1,0 +1,4 @@
+std::mt19937 rng(std::random_device{}());
+std::uniform_int_distribution<int> die(1, 6);
+int hp = 25, shield = 0, wave = 1;
+int d1 = die(rng), d2 = die(rng), d3 = die(rng);

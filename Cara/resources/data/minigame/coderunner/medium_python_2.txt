@@ -1,0 +1,7 @@
+def tick(temp, coolant):
+temp += random.randint(0, 2)
+if temp >= 100:
+return 'MELTDOWN'
+if coolant < 15:
+return 'NO COOLANT'
+return 'NOMINAL' if temp < 30 else 'WATCH'

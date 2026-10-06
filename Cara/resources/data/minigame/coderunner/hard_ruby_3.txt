@@ -1,0 +1,9 @@
+def trace(host, max_hops = 30)
+hops = []
+(1..max_hops).each do |ttl|
+reply = probe(host, ttl)
+hops << format('%2d  %-15s  %dms', ttl, reply.ip, reply.ms)
+break if reply.ip == host
+end
+hops.join("\n")
+end

@@ -1,0 +1,7 @@
+async function traceRoute(host) {
+const hops = [];
+for (let ttl = 1; ttl <= 30; ttl++) {
+const res = await probe(host, ttl);
+hops.push(`${ttl}: ${res.ip} ${res.ms}ms`);
+if (res.ip === host) break; }
+return hops;

@@ -1,0 +1,7 @@
+def trace(host, max_hops=30):
+hops = []
+for ttl in range(1, max_hops + 1):
+reply = probe(host, ttl)
+hops.append(f'{ttl:2d}  {reply.ip:<15}  {reply.ms}ms')
+if reply.ip == host: break
+return '\n'.join(hops)

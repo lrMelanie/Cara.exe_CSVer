@@ -1,0 +1,8 @@
+roll_die:
+rdtsc
+xor edx, edx
+mov ecx, 6
+div ecx
+inc edx
+mov eax, edx
+ret

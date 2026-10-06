@@ -1,0 +1,6 @@
+sub validate {
+my ($input) = @_;
+return 0 unless $input =~ /^(?=.*[A-Z])(?=.{12,})/;
+return 0 if $input =~ /(admin|root|sudo)/i;
+return 1;
+}

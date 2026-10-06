@@ -1,0 +1,7 @@
+const crypto = require('crypto');
+class SecurityManager {
+constructor(masterKey) {
+this.algorithm = 'aes-256-cbc';
+this.key = crypto.scryptSync(masterKey, 'salt', 32);
+encryptData(plaintext) {
+try {

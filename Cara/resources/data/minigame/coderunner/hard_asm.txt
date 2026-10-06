@@ -1,0 +1,10 @@
+.loop:
+mov edi, [ports + rbx*4]
+call probe_port
+test eax, eax
+jnz .closed
+mov [open + rbx*4], edi
+.closed:
+inc rbx
+cmp rbx, [count]
+jl .loop

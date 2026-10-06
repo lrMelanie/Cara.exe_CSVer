@@ -1,0 +1,4 @@
+const mask = ip.split('.').reduce((a, o) => (a << 8) | (+o & 0xff), 0);
+const net = (mask & (~0 << (32 - cidr))) >>> 0;
+const oct = s => (net >>> s) & 0xff;
+return `${oct(24)}.${oct(16)}.${oct(8)}.${oct(0)}/${cidr}`;

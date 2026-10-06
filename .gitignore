@@ -1,27 +1,24 @@
-*.d
-*.slo
-*.lo
-*.o
-*.obj
-*.gch
-*.pch
-*.so
-*.dylib
+# .NET build output
+bin/
+obj/
+publish/
 *.dll
-*.mod
-*.smod
-*.lai
-*.la
-*.a
-*.lib
-*.exe
-!Cara.exe/
-*.out
-*.app
-*.logs
-*.log
-*.tlog
+*.pdb
+
+# Visual Studio / Rider working files (per-user)
 .vs/
-*.vsidx
+*.user
 *.suo
-!Cara.exe[OLD]
+*.vsidx
+
+# Runtime logs (may contain local / personal data - never commit)
+Cara/resources/logs/*
+!Cara/resources/logs/.gitkeep
+
+# Per-user minigame high scores (do not sync)
+Cara/resources/data/minigame/coderunner/hscore.txt
+Cara/resources/data/minigame/dicearena/best.txt
+Cara/resources/data/minigame/reactor/best.txt
+
+# Temp artifacts written at runtime
+location.log

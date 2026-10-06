@@ -1,0 +1,8 @@
+for _, port in ipairs(targets) do
+local tcp = socket.tcp()
+tcp:settimeout(timeout)
+if tcp:connect(host, port) then
+table.insert(open, port)
+end
+tcp:close()
+end

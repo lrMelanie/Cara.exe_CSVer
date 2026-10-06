@@ -1,0 +1,6 @@
+int tick(int temp, int coolant) {
+temp += rng() % 3;
+if (temp >= 100) return MELTDOWN;
+if (coolant < 15) return NO_COOLANT;
+return temp < 30 ? NOMINAL : WATCH;
+}

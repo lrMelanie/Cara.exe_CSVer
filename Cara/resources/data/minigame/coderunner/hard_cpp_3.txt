@@ -1,0 +1,7 @@
+std::vector<std::string> trace(const std::string& host) {
+std::vector<std::string> hops;
+for (int ttl = 1; ttl <= 30; ++ttl) {
+auto reply = probe(host, ttl);
+hops.push_back(std::to_string(ttl) + "  " + reply.ip);
+if (reply.ip == host) break; }
+return hops;

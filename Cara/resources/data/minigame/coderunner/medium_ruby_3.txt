@@ -1,0 +1,6 @@
+def scan(host, ports)
+ports.select do |p|
+Socket.tcp(host, p, connect_timeout: 0.2) { true }
+rescue StandardError
+false
+end end

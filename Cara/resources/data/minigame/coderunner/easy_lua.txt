@@ -1,0 +1,4 @@
+local socket = require("socket")
+local Scanner = {}
+Scanner.__index = Scanner
+local host = "10.0.0.14"

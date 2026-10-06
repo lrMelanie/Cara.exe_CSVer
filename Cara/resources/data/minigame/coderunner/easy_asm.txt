@@ -1,0 +1,4 @@
+section .data
+host db "10.0.0.14", 0
+ports dd 22, 80, 443, 8080
+count dd 4

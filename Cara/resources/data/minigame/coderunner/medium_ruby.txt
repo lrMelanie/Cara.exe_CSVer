@@ -1,0 +1,5 @@
+raise CipherError unless valid_key?(key)
+plaintext.bytes.each_with_index.map do |byte, i|
+(byte ^ key[i % key.length].ord).chr
+end.join.unpack('H*').first
+rescue => e

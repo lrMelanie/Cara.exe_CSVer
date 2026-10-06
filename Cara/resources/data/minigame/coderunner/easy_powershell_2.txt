@@ -1,0 +1,3 @@
+$hp = 25; $shield = 0; $wave = 1
+$dice = 1..3 | ForEach-Object { Get-Random -Min 1 -Max 7 }
+$atk = 0; $def = 0; $heal = 0

@@ -1,0 +1,4 @@
+$Target = "10.0.0.14"
+$Scan = 20..25 + 80, 443
+$Open = [System.Collections.ArrayList]@()
+$Timeout = 200

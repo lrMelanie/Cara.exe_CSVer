@@ -1,0 +1,6 @@
+for (int p = 0; p < n; p++) {
+int sock = socket(AF_INET, SOCK_STREAM, 0);
+addr.sin_port = htons(ports[p]);
+if (connect(sock, (struct sockaddr*)&addr, len) == 0)
+open[count++] = ports[p];
+close(sock); }

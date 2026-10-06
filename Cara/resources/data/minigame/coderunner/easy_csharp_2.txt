@@ -1,0 +1,5 @@
+private readonly Random _rng = new();
+private int _hp, _maxHp, _shield, _wave, _score;
+_hp = _maxHp = 25;
+_shield = 0;
+_wave = 1;

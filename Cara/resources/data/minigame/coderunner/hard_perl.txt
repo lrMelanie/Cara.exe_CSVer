@@ -1,0 +1,6 @@
+sub checksum {
+my ($data) = @_;
+my $sig = 0x1505;
+$sig = (($sig << 5) + $sig) ^ $_ for unpack("C*", $data);
+return sprintf("%08X", $sig & 0xFFFFFFFF);
+}

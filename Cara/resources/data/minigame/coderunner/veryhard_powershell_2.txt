@@ -1,0 +1,5 @@
+$ev = Get-Random -Min 1 -Max 101
+$Temp += if ($ev -le 15) { 8 + ($ev -band 7) } else { 0 }
+$Coolant -= if ($ev -le 30) { 10 + ($ev % 10) } else { 0 }
+if ($Coolant -lt 0) { $Coolant = 0 }
+if ($Temp -ge 100 -or $Pressure -ge 100) { throw "MELTDOWN" }

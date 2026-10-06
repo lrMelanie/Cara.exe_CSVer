@@ -1,0 +1,7 @@
+_connect:
+mov rax, 41
+mov rdi, 2
+mov rsi, 1
+xor rdx, rdx
+syscall
+mov [fd], eax

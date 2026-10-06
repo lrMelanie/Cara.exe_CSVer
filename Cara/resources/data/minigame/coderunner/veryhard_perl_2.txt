@@ -1,0 +1,5 @@
+my $ev = int(rand(100)) + 1;
+$temp += $ev <= 15 ? (8 + ($ev & 7)) : 0;
+$coolant -= $ev <= 30 ? 10 + $ev % 10 : 0;
+$coolant = 0 if $coolant < 0;
+die "MELTDOWN" if $temp >= 100 || $pressure >= 100;

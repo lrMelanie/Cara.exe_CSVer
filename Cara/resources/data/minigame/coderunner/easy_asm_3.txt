@@ -1,0 +1,4 @@
+section .data
+msg db "UPLINK ACTIVE", 10, 0
+len equ $ - msg
+fd dd 0

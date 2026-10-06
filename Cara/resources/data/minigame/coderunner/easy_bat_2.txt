@@ -1,0 +1,4 @@
+@echo off
+set /a HP=25, SHIELD=0, WAVE=1
+set /a D1=%random% %% 6 + 1
+set /a D2=%random% %% 6 + 1

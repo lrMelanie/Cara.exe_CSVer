@@ -1,0 +1,4 @@
+const int ARRAY_SIZE = 100;
+const int SAMPLE_COUNT = 100000;
+int main() {
+int stats[ARRAY_SIZE] = {0};

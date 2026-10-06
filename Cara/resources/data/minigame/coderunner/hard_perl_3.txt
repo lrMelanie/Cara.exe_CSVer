@@ -1,0 +1,10 @@
+sub trace {
+my ($host, $max) = @_;
+my @hops;
+for my $ttl (1 .. $max // 30) {
+my $r = probe($host, $ttl);
+push @hops, sprintf("%2d  %s", $ttl, $r->{ip});
+last if $r->{ip} eq $host;
+}
+return @hops;
+}

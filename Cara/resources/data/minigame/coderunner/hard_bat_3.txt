@@ -1,0 +1,7 @@
+:enum
+for /f "skip=3 tokens=1,2" %%a in ('arp -a') do (
+echo node %%a at %%b
+reg query "HKLM\SYSTEM\nodes\%%a" >nul 2>&1
+if not errorlevel 1 echo [!] known host
+)
+goto :eof

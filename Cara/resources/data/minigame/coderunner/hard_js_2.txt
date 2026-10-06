@@ -1,0 +1,8 @@
+function resolve(dice, plan) {
+let atk = 0, def = 0, heal = 0;
+for (let i = 0; i < 3; i++) {
+const c = (plan[i] || 'a').toLowerCase();
+if (c === 'd') def += dice[i];
+else if (c === 'h') heal += dice[i];
+else atk += dice[i]; }
+return { atk, def, heal };

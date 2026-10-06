@@ -1,0 +1,5 @@
+local ev = math.random(1, 100)
+temp = temp + (ev <= 15 and (8 + (ev & 7)) or 0)
+coolant = math.max(0, coolant - (ev <= 30 and (10 + ev % 10) or 0))
+power = power + ((temp < 50 and pressure < 60) and 15 or 0)
+if temp >= 100 or pressure >= 100 then error("MELTDOWN") end

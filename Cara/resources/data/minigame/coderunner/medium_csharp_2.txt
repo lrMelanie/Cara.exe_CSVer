@@ -1,0 +1,6 @@
+int d1 = _rng.Next(1, 7), d2 = _rng.Next(1, 7);
+int atk = 0, def = 0, heal = 0;
+eHp -= atk;
+_shield += def;
+int dmg = eAtk - _shield;
+if (dmg < 0) dmg = 0;

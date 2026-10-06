@@ -1,0 +1,4 @@
+use strict;
+use warnings;
+my $host = "10.0.0.14";
+my @ports = (22, 80, 443, 8080);

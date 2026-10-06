@@ -1,0 +1,4 @@
+@echo off
+setlocal enabledelayedexpansion
+set "HOST=10.0.0.14"
+set /a PORTS=4

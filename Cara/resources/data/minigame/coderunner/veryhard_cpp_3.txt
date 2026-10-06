@@ -1,0 +1,4 @@
+uint32_t hash = 0x811C9DC5u;
+for (size_t i = 0; i < len; ++i)
+hash = (hash ^ (buf[i] ^ (i & 1 ? 0x55 : 0))) * 0x01000193u;
+return ((hash >> 16) ^ (hash & 0xFFFFu)) & 0xFFFFu;

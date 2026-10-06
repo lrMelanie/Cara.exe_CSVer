@@ -1,0 +1,5 @@
+public bool ValidateCredentials(string input) {
+return _regex.IsMatch(input) &&
+CheckBlacklist(input) &&
+(input.Length % 2 == 0 ?
+ValidateEven(input) : ValidateOdd(input)); }

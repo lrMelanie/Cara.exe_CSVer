@@ -1,0 +1,6 @@
+for my $i (0 .. 2) {
+my $c = lc(substr($plan, $i, 1) || "a");
+if ($c eq "d") { $def += $dice[$i] }
+elsif ($c eq "h") { $heal += $dice[$i] }
+else { $atk += $dice[$i] }
+}

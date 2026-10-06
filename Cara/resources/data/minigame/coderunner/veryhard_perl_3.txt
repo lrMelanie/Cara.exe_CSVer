@@ -1,0 +1,5 @@
+my @oct = split /\./, $ip;
+my $mask = 0;
+$mask = ($mask << 8) | ($_ & 0xff) for @oct;
+my $net = $mask & (~0 << (32 - $cidr));
+printf "%d.%d.0.0/%d\n", $net >> 24, ($net >> 16) & 0xff, $cidr;

@@ -1,0 +1,4 @@
+var targets = new List<int> { 22, 80, 443, 8080 };
+string host = "10.0.0.14";
+var open = new List<int>();
+int timeout = 200;

@@ -1,0 +1,6 @@
+var hops = new List<string>();
+for (int ttl = 1; ttl <= 30; ttl++) {
+var reply = Probe(host, ttl);
+hops.Add($"{ttl,2}  {reply.Ip,-15}  {reply.Ms}ms");
+if (reply.Ip == host) break; }
+return string.Join("\n", hops);

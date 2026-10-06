@@ -1,0 +1,6 @@
+foreach ($port in $Scan) {
+$client = New-Object Net.Sockets.TcpClient
+$h = $client.BeginConnect($Target, $port, $null, $null)
+if ($h.AsyncWaitHandle.WaitOne($Timeout)) { [void]$Open.Add($port) }
+$client.Close()
+}

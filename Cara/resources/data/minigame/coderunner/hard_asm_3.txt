@@ -1,0 +1,9 @@
+.send:
+mov rax, 44
+mov rdi, [fd]
+lea rsi, [payload]
+mov rdx, payload_len
+xor r10, r10
+syscall
+cmp rax, 0
+jl .error

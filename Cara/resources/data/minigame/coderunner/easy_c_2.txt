@@ -1,0 +1,5 @@
+srand(time(NULL));
+int hp = 25, shield = 0, wave = 1;
+int d1 = rand() % 6 + 1;
+int d2 = rand() % 6 + 1;
+int d3 = rand() % 6 + 1;

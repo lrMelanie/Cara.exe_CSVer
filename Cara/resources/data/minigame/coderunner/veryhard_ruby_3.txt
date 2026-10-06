@@ -1,0 +1,3 @@
+sig = data.each_byte.reduce(0x1505) { |h, b| ((h << 5) + h) ^ b }
+chk = data.bytes.each_with_index.sum { |b, i| i.odd? ? b ^ 0x55 : 0 }
+format('%08X:%02X', sig & 0xFFFFFFFF, chk & 0xFF)

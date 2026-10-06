@@ -1,0 +1,4 @@
+private bool CheckBlacklist(string input) {
+string[] forbidden = {"admin", "root", "sudo"};
+return !forbidden.Any(input.ToLower().Contains); }
+private bool ValidateEven(string input) {

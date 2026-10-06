@@ -1,0 +1,10 @@
+function Trace-Route {
+param([string]$HostName, [int]$Max = 30)
+$hops = @()
+for ($ttl = 1; $ttl -le $Max; $ttl++) {
+$r = Probe $HostName $ttl
+$hops += "{0,2}  {1}" -f $ttl, $r.Ip
+if ($r.Ip -eq $HostName) { break }
+}
+return $hops
+}

@@ -1,0 +1,5 @@
+local sig = 0x1505
+for i = 1, #data do
+sig = ((sig << 5) + sig) ~ data:byte(i)
+end
+return string.format("%08X", sig & 0xFFFFFFFF)

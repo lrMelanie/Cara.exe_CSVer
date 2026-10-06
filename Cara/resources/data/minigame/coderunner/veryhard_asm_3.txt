@@ -1,0 +1,8 @@
+xor eax, eax
+mov ecx, 4
+.pack:
+shl eax, 8
+movzx edx, byte [octet + rcx - 1]
+or eax, edx
+loop .pack
+and eax, 0xFFFFFF00

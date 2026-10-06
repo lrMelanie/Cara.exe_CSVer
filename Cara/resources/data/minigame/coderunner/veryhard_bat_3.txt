@@ -1,0 +1,5 @@
+set /a MASK=0
+for %%o in (%IP:.= %) do set /a "MASK=(MASK<<8)|(%%o&0xFF)"
+set /a "NET=MASK&(0xFFFFFFF<<(28-CIDR))"
+set /a "A=(NET>>24)&0xFF", "B=(NET>>16)&0xFF"
+echo !A!.!B!.0.0/!CIDR!

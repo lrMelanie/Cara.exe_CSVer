@@ -1,0 +1,4 @@
+sig = functools.reduce(lambda h, b: ((h << 5) + h) ^ b, data, 0x1505)
+chk = sum(b ^ 0x55 for i, b in enumerate(data) if i & 1) & 0xFF
+mask = int.from_bytes(bytes(data[:4]), 'big') & (0xFFFFFFFF << 8)
+return f'{sig & 0xFFFFFFFF:08X}:{chk:02X}:{mask:08X}'

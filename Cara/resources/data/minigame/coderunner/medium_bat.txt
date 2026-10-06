@@ -1,0 +1,5 @@
+for %%p in (22 80 443 8080) do (
+echo probing %HOST%:%%p
+powershell -nop -c "Test-NetConnection %HOST% -Port %%p" >nul
+if !errorlevel! equ 0 set "OPEN=!OPEN! %%p"
+)

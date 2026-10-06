@@ -1,0 +1,6 @@
+int tick(int temp, int coolant) {
+temp += rand() % 3;
+if (temp >= 100) return -1;
+if (coolant < 15) return 0;
+return temp < 30 ? 1 : 2;
+}

@@ -1,0 +1,5 @@
+return input.Select((c, i) => (i % 2 == 0) ? c ^ 0x55 : c)
+.Sum() % 256 == 0; }
+private bool ValidateOdd(string input) {
+return Encoding.UTF8.GetBytes(input)
+.Aggregate(0, (acc, b) => acc ^ b) != 0xDE;

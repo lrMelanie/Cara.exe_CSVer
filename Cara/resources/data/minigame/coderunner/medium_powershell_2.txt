@@ -1,0 +1,7 @@
+function Tick {
+param([int]$Temp, [int]$Coolant)
+$Temp += Get-Random -Min 0 -Max 3
+if ($Temp -ge 100) { return "MELTDOWN" }
+if ($Coolant -lt 15) { return "NO COOLANT" }
+if ($Temp -lt 30) { "NOMINAL" } else { "WATCH" }
+}

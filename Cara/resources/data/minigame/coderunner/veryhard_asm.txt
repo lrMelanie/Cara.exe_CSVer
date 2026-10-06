@@ -1,0 +1,8 @@
+mov eax, 0x1505
+.hash:
+movzx edx, byte [rsi + rcx]
+shl eax, 5
+add eax, edx
+xor eax, edx
+loop .hash
+and eax, 0xFFFFFFF

@@ -1,0 +1,6 @@
+function tick(temp, coolant) {
+temp += Math.floor(Math.random() * 3);
+if (temp >= 100) return 'MELTDOWN';
+if (coolant < 15) return 'NO COOLANT';
+return temp < 30 ? 'NOMINAL' : 'WATCH';
+}

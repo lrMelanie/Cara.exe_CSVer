@@ -222,6 +222,7 @@ public sealed class Assistant
                     }
                 }
             }
+            Cara.Fx.Haunt.Maybe(100000);
             Thread.Sleep(1000);
         }
     }

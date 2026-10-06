@@ -1,0 +1,5 @@
+foreach (int port in targets) {
+using var client = new TcpClient();
+var task = client.ConnectAsync(host, port);
+if (task.Wait(timeout)) open.Add(port);
+else Console.WriteLine($"port {port}: filtered"); }

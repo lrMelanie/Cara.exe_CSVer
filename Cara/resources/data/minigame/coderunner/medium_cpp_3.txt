@@ -1,0 +1,6 @@
+for (int port : targets) {
+int sock = socket(AF_INET, SOCK_STREAM, 0);
+addr.sin_port = htons(port);
+if (connect(sock, (sockaddr*)&addr, sizeof(addr)) == 0)
+open_ports.push_back(port);
+close(sock); }

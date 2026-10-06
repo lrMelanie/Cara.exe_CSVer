@@ -1,0 +1,6 @@
+function Scanner.new(host, timeout)
+local self = setmetatable({}, Scanner)
+self.host = host
+self.timeout = timeout or 0.2
+return self
+end

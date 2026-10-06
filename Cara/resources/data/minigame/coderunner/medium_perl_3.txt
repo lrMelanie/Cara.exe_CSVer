@@ -1,0 +1,6 @@
+foreach my $port (@scan) {
+my $sock = IO::Socket::INET->new(
+PeerAddr => $target, PeerPort => $port, Timeout => 1);
+push @open, $port if $sock;
+close $sock if $sock;
+}

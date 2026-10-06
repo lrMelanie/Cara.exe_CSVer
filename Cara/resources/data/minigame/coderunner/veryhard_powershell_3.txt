@@ -1,0 +1,7 @@
+$mask = 0
+foreach ($o in ($Ip -split '\.')) {
+$mask = ($mask -shl 8) -bor ([int]$o -band 0xFF)
+}
+$net = $mask -band (-bnot 0 -shl (32 - $Cidr))
+$a = ($net -shr 24) -band 0xFF
+"{0}.0.0/{1}" -f $a, $Cidr

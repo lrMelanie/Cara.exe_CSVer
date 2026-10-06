@@ -1,0 +1,5 @@
+$sig = 0x811C9DC5
+foreach ($b in $Bytes) {
+$sig = (($sig -bxor $b) * 0x01000193) -band 0xFFFFFFFF
+}
+"{0:X8}" -f (($sig -shr 16) -bxor ($sig -band 0xFFFF))

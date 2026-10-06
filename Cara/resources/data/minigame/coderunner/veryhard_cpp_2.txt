@@ -1,0 +1,5 @@
+int ev = rng() % 100 + 1;
+temp += (ev <= 15) ? (pressure += 6, 8 + (ev & 7)) : 0;
+coolant = std::max(0, coolant - (ev <= 30 ? 10 + ev % 10 : 0));
+power += (temp < 50 && pressure < 60) ? 15 : 0;
+if (temp >= 100 || pressure >= 100) throw std::runtime_error("MELT");

@@ -1,0 +1,8 @@
+for ($i = 0; $i -lt 3; $i++) {
+$c = if ($i -lt $Plan.Length) { $Plan[$i] } else { 'a' }
+switch ("$c".ToLower()) {
+'d' { $def += $dice[$i] }
+'h' { $heal += $dice[$i] }
+default { $atk += $dice[$i] }
+}
+}

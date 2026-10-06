@@ -1,0 +1,5 @@
+module QuantumCrypto
+class CipherError < StandardError
+def initialize(msg="ERR:0x#{rand(0x1000..0xFFFF).to_s(16)}")
+super end
+def self.encrypt(plaintext, key)

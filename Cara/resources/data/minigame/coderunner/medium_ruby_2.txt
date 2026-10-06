@@ -1,0 +1,6 @@
+def tick(temp, coolant)
+temp += rand(0..2)
+return :meltdown if temp >= 100
+return :no_coolant if coolant < 15
+temp < 30 ? :nominal : :watch
+end

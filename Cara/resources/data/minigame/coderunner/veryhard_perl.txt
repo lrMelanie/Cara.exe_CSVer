@@ -1,0 +1,4 @@
+my %seen;
+my @uniq = grep { !$seen{$_}++ } map { $_ ^ 0x55 } @bytes;
+my $mask = unpack("N", pack("C4", split /\./, $ip));
+printf "%08X:%d\n", $mask & 0xFFFFFFFF, scalar @uniq;

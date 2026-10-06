@@ -1,0 +1,21 @@
+inputs = tokenizer_distil(text, return_tensors="pt")
+outputs = model_distil(**inputs)
+return model_distil.config.id2label[outputs.logits.argmax().item()]
+def generate(prompt: str) -> str:
+params = {'max_length': 75,'do_sample': True}
+return model_gpt3.generate(**params).decoded_text
+import hashlib
+def calculate_checksum(file_path):
+try:
+sha = hashlib.sha256()
+with open(file_path, 'rb') as f:
+while chunk := f.read(4096):
+sha.update(chunk)
+return sha.hexdigest()
+except IOError:
+print(f"IO_ERROR:0x08X")
+def verify_file(original_hash, file_path):
+current_hash = calculate_checksum(file_path)
+if current_hash == original_hash:
+print("INTEGRITY_CHECK_PASSED")
+return True

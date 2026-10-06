@@ -1,0 +1,5 @@
+set /a EV=%random% %% 100 + 1
+if %EV% leq 15 set /a "TEMP+=8+(EV&7)", "PRESSURE+=6"
+if %EV% leq 30 set /a "COOLANT-=10+EV%%10"
+if %TEMP% geq 100 echo MELTDOWN & exit /b 1
+if %PRESSURE% geq 100 echo MELTDOWN & exit /b 1

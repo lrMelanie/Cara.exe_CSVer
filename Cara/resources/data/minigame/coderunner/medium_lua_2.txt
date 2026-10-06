@@ -1,0 +1,6 @@
+local function tick(temp, coolant)
+temp = temp + math.random(0, 2)
+if temp >= 100 then return "MELTDOWN" end
+if coolant < 15 then return "NO COOLANT" end
+return temp < 30 and "NOMINAL" or "WATCH"
+end

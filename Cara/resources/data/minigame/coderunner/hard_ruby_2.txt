@@ -1,0 +1,8 @@
+def resolve(dice, plan)
+atk = block = heal = 0
+dice.each_with_index do |die, i|
+case (plan[i] || 'a').downcase
+when 'd' then block += die
+when 'h' then heal += die
+else atk += die
+end end

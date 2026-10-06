@@ -1,0 +1,6 @@
+:tick
+set /a TEMP+=%random% %% 3
+if %TEMP% geq 100 echo MELTDOWN & goto :eof
+if %COOLANT% lss 15 echo NO COOLANT & goto :eof
+echo NOMINAL
+goto :eof

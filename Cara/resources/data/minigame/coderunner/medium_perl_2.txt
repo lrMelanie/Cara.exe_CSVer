@@ -1,0 +1,7 @@
+sub tick {
+my ($temp, $coolant) = @_;
+$temp += int(rand(3));
+return "MELTDOWN" if $temp >= 100;
+return "NO COOLANT" if $coolant < 15;
+return $temp < 30 ? "NOMINAL" : "WATCH";
+}

@@ -1,0 +1,7 @@
+function Scanner:probe(port)
+local tcp = socket.tcp()
+tcp:settimeout(self.timeout)
+local ok = tcp:connect(self.host, port)
+tcp:close()
+return ok ~= nil
+end

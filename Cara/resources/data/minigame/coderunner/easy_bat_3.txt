@@ -1,0 +1,4 @@
+@echo off
+title TRACE // deep uplink
+set "TARGET=10.0.0.14"
+set "LOG=%TEMP%\trace.log"

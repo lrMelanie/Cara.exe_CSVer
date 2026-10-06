@@ -1,0 +1,7 @@
+:scan
+for /l %%t in (1,1,30) do (
+for /f "tokens=*" %%r in ('ping -n 1 -i %%t %HOST%') do (
+echo hop %%t: %%r
+)
+)
+goto :eof

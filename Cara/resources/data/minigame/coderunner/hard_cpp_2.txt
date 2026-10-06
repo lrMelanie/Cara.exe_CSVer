@@ -1,0 +1,7 @@
+void resolve(const int dice[3], const std::string& plan) {
+int atk = 0, def = 0, heal = 0;
+for (int i = 0; i < 3; ++i) {
+char c = i < plan.size() ? std::tolower(plan[i]) : 'a';
+if (c == 'd') def += dice[i];
+else if (c == 'h') heal += dice[i];
+else atk += dice[i]; }

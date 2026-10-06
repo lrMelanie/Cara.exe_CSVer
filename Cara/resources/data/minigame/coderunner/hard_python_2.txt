@@ -1,0 +1,8 @@
+def resolve(dice, plan):
+atk = block = heal = 0
+for i, die in enumerate(dice):
+c = (plan[i] if i < len(plan) else 'a').lower()
+if c == 'd': block += die
+elif c == 'h': heal += die
+else: atk += die
+return atk, block, heal

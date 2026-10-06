@@ -1,0 +1,4 @@
+import random
+hp, shield, wave = 25, 0, 1
+dice = [random.randint(1, 6) for _ in range(3)]
+atk = block = heal = 0

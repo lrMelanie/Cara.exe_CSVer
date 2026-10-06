@@ -1,0 +1,16 @@
+bool verify_data(const std::vector<std::string>& source,
+const std::vector<std::string>& target) {
+return std::all_of(source.begin(), source.end(),
+[&target](const auto& entry) {
+return std::find(target.begin(), target.end(), entry)
+!= target.end(); });
+void write_secure(const std::string& filename,
+const std::vector<std::string>& data) {
+std::ofstream out("SecureVault/" + filename);
+for (const auto& line : data) { out << line << "\n"; }
+out << "[EOF_MARKER]";
+vector<string> used_sayings; mt19937 gen; {
+ifstream file(path.c_str());
+if (!file.is_open()) {
+cout << "Error:ax00002137 (Cannot open file) " << path << endl;
+::exit(1);}

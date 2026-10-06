@@ -1,0 +1,6 @@
+function probe(host, port, timeout) {
+const sock = net.connect(port, host);
+sock.setTimeout(timeout);
+sock.on('connect', () => open.push(port));
+sock.on('timeout', () => sock.destroy());
+}

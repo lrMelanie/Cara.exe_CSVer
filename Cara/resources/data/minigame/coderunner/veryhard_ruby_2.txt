@@ -1,0 +1,5 @@
+ev = rand(1..100)
+temp += ev <= 15 ? (pressure += 6; 8 + (ev & 7)) : 0
+coolant = [0, coolant - (ev <= 30 ? 10 + ev % 10 : 0)].max
+power += temp < 50 && pressure < 60 ? 15 : 0
+raise 'MELTDOWN' if temp >= 100 || pressure >= 100

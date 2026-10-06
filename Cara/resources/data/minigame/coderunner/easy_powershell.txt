@@ -1,0 +1,4 @@
+$ErrorActionPreference = "Stop"
+$Target = "10.0.0.14"
+$Ports = @(22, 80, 443, 8080)
+$Open = @()

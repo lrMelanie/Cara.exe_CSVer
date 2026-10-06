@@ -1,0 +1,5 @@
+srand(time(nullptr));
+for (int i=0; i<SAMPLE_COUNT; i++) {
+int idx = rand() % ARRAY_SIZE;
+stats[idx]++;
+cout << "RAW DISTRIBUTION:" << endl;

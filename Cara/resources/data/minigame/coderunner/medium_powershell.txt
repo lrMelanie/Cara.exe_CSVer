@@ -1,0 +1,6 @@
+function Test-Credential {
+param([string]$Value)
+if ($Value -notmatch '(?=.*[A-Z])(?=.{12,})') { return $false }
+if ($Value -match 'admin|root|sudo') { return $false }
+return $true
+}

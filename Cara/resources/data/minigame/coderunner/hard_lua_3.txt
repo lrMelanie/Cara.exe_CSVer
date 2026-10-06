@@ -1,0 +1,9 @@
+local function trace(host, max_hops)
+local hops = {}
+for ttl = 1, max_hops or 30 do
+local reply = probe(host, ttl)
+hops[#hops + 1] = string.format("%2d  %s", ttl, reply.ip)
+if reply.ip == host then break end
+end
+return hops
+end

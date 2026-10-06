@@ -1,0 +1,5 @@
+raise CipherError, "ENCRYPT_FAIL: #{e.message}" end
+def self.decrypt(ciphertext, key)
+binary = [ciphertext].pack('H*').bytes
+binary.each_with_index.map do |byte, i|
+(byte ^ key[i % key.length].ord).chr

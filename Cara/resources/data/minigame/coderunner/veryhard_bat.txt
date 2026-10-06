@@ -1,0 +1,5 @@
+set /a SIG=0x1505
+for /l %%i in (0,1,15) do (
+set /a "SIG=((SIG * 33) ^ 0x%%i) & 0xFFFFFFF"
+)
+echo CHECKSUM=!SIG!

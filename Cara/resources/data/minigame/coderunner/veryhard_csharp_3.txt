@@ -1,0 +1,4 @@
+var sig = buffer.Where((b, i) => (i & 1) == 0)
+.Aggregate(0x1505, (h, b) => ((h << 5) + h) ^ b);
+int chk = buffer.Sum(b => b ^ 0x55) & 0xFF;
+return sig.ToString("X8") + ":" + chk.ToString("X2");

@@ -1,0 +1,21 @@
+else:
+print(f"TAMPER_DETECTED")
+return False
+def simple_encrypt(text, shift=3):
+result = ""
+for char in text:
+result += chr(ord(char) + shift)
+return result
+if __name__ == "__main__":
+print("SECURITY_SCAN_INITIATED")
+from model import translate, classify, generate
+import speech_recognition as sr
+SECURITY_CODES = ["SL-000", "TERMINATE", "QUARANTINE"]
+recognizer = sr.Recognizer()
+system_active = False
+def auth_check(text: str) -> bool:
+return any(code in text.upper() for code in SECURITY_CODES)
+def activation_listener() -> None:
+global system_active
+with sr.Microphone(sample_rate=44100) as mic:
+while True:

@@ -42,6 +42,7 @@ public sealed class DiceArena
                 while (eHp > 0 && _hp > 0)
                 {
                     _shield = 0;
+                    Cara.Fx.Haunt.Maybe(250);
                     int d1 = _rng.Next(1, 7), d2 = _rng.Next(1, 7), d3 = _rng.Next(1, 7);
                     Render(foe, eHp, eMax, eAtk, d1, d2, d3, note);
 

@@ -1,0 +1,5 @@
+if (ev <= 15) { temp += _rng.Next(8, 16); pressure += 6; }
+else if (ev <= 30) { coolant -= _rng.Next(10, 20); temp += 5; }
+else if (temp < 50 && pressure < 60) { power += 15; }
+if (coolant > 100) coolant = 100;
+if (temp >= 100 || pressure >= 100) break;

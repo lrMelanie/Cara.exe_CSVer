@@ -1,0 +1,4 @@
+int ports[] = {22, 80, 443, 8080};
+const char *host = "10.0.0.14";
+int open[64];
+int count = 0;

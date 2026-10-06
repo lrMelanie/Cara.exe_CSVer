@@ -1,0 +1,8 @@
+mov eax, [ev]
+cmp eax, 15
+jg .check30
+add dword [temp], 8
+add dword [pressure], 6
+.check30:
+cmp dword [temp], 100
+jge .boom

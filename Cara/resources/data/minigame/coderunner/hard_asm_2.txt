@@ -1,0 +1,10 @@
+tick:
+add [temp], eax
+cmp dword [temp], 100
+jge .meltdown
+cmp dword [coolant], 15
+jl .no_coolant
+ret
+.meltdown:
+mov eax, -1
+ret

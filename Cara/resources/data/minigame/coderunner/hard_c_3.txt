@@ -1,0 +1,7 @@
+int trace(const char *host, char out[][64]) {
+int hops = 0;
+for (int ttl = 1; ttl <= 30; ttl++) {
+struct reply r = probe(host, ttl);
+sprintf(out[hops++], "%2d  %s", ttl, r.ip);
+if (strcmp(r.ip, host) == 0) break; }
+return hops;

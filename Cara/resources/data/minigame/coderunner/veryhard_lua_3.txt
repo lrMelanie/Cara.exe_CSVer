@@ -1,0 +1,6 @@
+local mask = 0
+for octet in ip:gmatch("%d+") do
+mask = (mask << 8) | (tonumber(octet) & 0xff)
+end
+local net = mask & (~0 << (32 - cidr))
+return ("%d.%d.0.0/%d"):format(net >> 24, net >> 16, cidr)

@@ -1,0 +1,4 @@
+const roll = () => 1 + Math.floor(Math.random() * 6);
+let hp = 25, shield = 0, wave = 1;
+const dice = [roll(), roll(), roll()];
+let atk = 0, def = 0, heal = 0;

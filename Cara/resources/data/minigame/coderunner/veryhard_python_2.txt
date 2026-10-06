@@ -1,0 +1,5 @@
+ev = random.randint(1, 100)
+temp += (8 + (ev & 7)) if ev <= 15 else 0
+coolant = max(0, coolant - (10 + ev % 10 if ev <= 30 else 0))
+power += 15 if temp < 50 and pressure < 60 else 0
+assert not (temp >= 100 or pressure >= 100), 'MELTDOWN'

@@ -1,0 +1,5 @@
+section .bss
+hp resd 1
+shield resd 1
+wave resd 1
+dice resd 3

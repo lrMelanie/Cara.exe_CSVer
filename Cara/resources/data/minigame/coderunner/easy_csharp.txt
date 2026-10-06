@@ -1,0 +1,4 @@
+using System.Text.RegularExpressions;
+public class SecurityValidator {
+private const string Pattern = @"^(?=.*[A-Z])(?=.{12,})";
+private readonly Regex _regex = new Regex(Pattern, RegexOptions.Compiled);

@@ -1,0 +1,8 @@
+function Get-Checksum {
+param([byte[]]$Data)
+$sig = 0x1505
+foreach ($b in $Data) {
+$sig = ((($sig -shl 5) + $sig) -bxor $b) -band 0xFFFFFFFF
+}
+return "{0:X8}" -f $sig
+}

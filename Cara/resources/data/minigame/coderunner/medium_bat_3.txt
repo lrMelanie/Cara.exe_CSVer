@@ -1,0 +1,5 @@
+for /f "tokens=2 delims=[]" %%a in ('ping -n 1 %TARGET%') do (
+echo resolved %TARGET% to %%a >> "%LOG%"
+set "ADDR=%%a"
+)
+type "%LOG%"

@@ -1,0 +1,7 @@
+} catch (e) {
+console.error(`DECRYPT_FAIL:0x${e.code.toString(16)}`);
+return "[CORRUPTED]";
+verifySignature(data, signature) {
+const verifier = crypto.createVerify('SHA256');
+verifier.update(data);
+return verifier.verify(this.key, signature, 'hex');

@@ -109,6 +109,7 @@ public sealed class Reactor
                 break;
             }
 
+            Cara.Fx.Haunt.Maybe(300);
             Console.Write("\nCOMMANDS: \nW - ENGAGE COOLING \nP - INCREASE POWER \nQ - SHUT DOWN \nC - KEEP OBSERVING\n>> ");
             char doing = ReadKey();
 
@@ -182,6 +183,7 @@ public sealed class Reactor
         while (true)
         {
             turn++;
+            Cara.Fx.Haunt.Maybe(300);
             temp += _rng.Next(0, 3);
             int ev = _rng.Next(1, 101);
             if (ev <= 15) { int s = _rng.Next(8, 16); temp += s; pressure += 6; note = "EVENT: power surge! temp +" + s + ", pressure rising."; }

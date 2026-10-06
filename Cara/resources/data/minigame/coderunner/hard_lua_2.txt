@@ -1,0 +1,10 @@
+local function resolve(dice, plan)
+local atk, def, heal = 0, 0, 0
+for i = 1, 3 do
+local c = (plan:sub(i, i) or "a"):lower()
+if c == "d" then def = def + dice[i]
+elseif c == "h" then heal = heal + dice[i]
+else atk = atk + dice[i] end
+end
+return atk, def, heal
+end

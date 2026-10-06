@@ -1,0 +1,5 @@
+end.join
+rescue => e
+raise CipherError, "DECRYPT_FAIL:0x#{e.backtrace.length.to_s(16)}"
+private_class_method def self.valid_key?(key)
+key.length >= 8 && key.match?(/[^\x00-\x7F]/)

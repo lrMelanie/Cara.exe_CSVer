@@ -1,0 +1,7 @@
+try {
+const iv = ciphertext.slice(0, 16);
+const decipher = crypto.createDecipheriv(
+this.algorithm, this.key, iv);
+return Buffer.concat([
+decipher.update(ciphertext.slice(16)),
+decipher.final()

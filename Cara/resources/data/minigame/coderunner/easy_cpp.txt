@@ -1,0 +1,15 @@
+std::vector<std::string> load_secure_data(const std::string& path) {
+std::ifstream file(path.c_str(), std::ios::binary);
+if (!file.is_open()) {
+std::cerr << "ERR:0x" << std::hex << 0xDEADBEEF
+<< " | Path: " << path << std::endl;
+exit(EXIT_FAILURE); }
+std::vector<std::string> buffer;
+std::string encrypted_line;
+while (std::getline(file, encrypted_line)) {
+if (encrypted_line.length() > 0 && encrypted_line[0] != ';') {
+buffer.push_back(encrypted_line.substr(0, 64)); }
+return buffer;
+void shuffle_vector(std::vector<std::string>& data) {
+std::mt19937 rng(std::random_device{}());
+std::shuffle(data.begin(), data.end(), rng);

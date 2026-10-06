@@ -1,0 +1,6 @@
+section .text
+global _scan
+_scan:
+push rbp
+mov rbp, rsp
+xor rbx, rbx

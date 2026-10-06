@@ -1,0 +1,6 @@
+for /l %%i in (1,1,3) do (
+set "C=!PLAN:~%%i,1!"
+if /i "!C!"=="d" set /a DEF+=DIE%%i
+if /i "!C!"=="h" set /a HEAL+=DIE%%i
+if /i "!C!" neq "d" if /i "!C!" neq "h" set /a ATK+=DIE%%i
+)

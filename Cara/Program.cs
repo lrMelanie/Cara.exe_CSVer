@@ -107,7 +107,8 @@ internal static class Program
                     break;
 
                 default:
-                    assistant.HandleQuery(command);
+                    if (!Cara.Fx.Haunt.TryCode(command))
+                        assistant.HandleQuery(command);
                     break;
             }
         }

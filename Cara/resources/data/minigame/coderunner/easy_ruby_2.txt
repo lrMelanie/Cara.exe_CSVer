@@ -1,0 +1,3 @@
+hp, shield, wave = 25, 0, 1
+dice = Array.new(3) { rand(1..6) }
+atk = block = heal = 0
