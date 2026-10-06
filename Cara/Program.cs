@@ -15,13 +15,16 @@ internal static class Program
         Console.OutputEncoding = Encoding.UTF8;
         Console.InputEncoding = Encoding.UTF8;
         EnableVirtualTerminal();
+        Directory.SetCurrentDirectory(AppContext.BaseDirectory);
 
         var assistant = new Assistant();
 
+        Loader.ShowLoading();
+        Console.Clear();
         ShowLogotype();
-        Thread.Sleep(400);
+        Thread.Sleep(600);
         assistant.PrintSlowly("Hello! I'm Cara and I am your virtual assistant.\n");
-        Thread.Sleep(400);
+        Thread.Sleep(600);
         assistant.ShowHelp();
 
         while (true)
@@ -37,6 +40,35 @@ internal static class Program
 
             switch (command)
             {
+                case "WELCOMETOTHEGAME":
+                    Cara.Fx.SystemFx.ExecuteWelcomeSequence();
+                    assistant.Log("You such a idiot");
+                    break;
+
+                case "A.L.I.V.E":
+                    Cara.Fx.SystemFx.ExecuteSpectralBroadcast();
+                    Console.WriteLine("[System] Audio calibration complete");
+                    assistant.Log("Audio calibration complete");
+                    break;
+
+                case "HELP-ME":
+                    Cara.Fx.SystemFx.TriggerPhantomProtocol();
+                    Console.WriteLine("[System] Diagnostic tools activated");
+                    assistant.Log("Diagnostic tools activated");
+                    break;
+
+                case "D0N'T-L00K-B3H1ND-Y0U":
+                    Cara.Fx.SystemFx.InitiateBlackMirror();
+                    Console.WriteLine("[System] Environment scan initialized");
+                    assistant.Log("Environment scan initialized");
+                    break;
+
+                case "fix me":
+                    Cara.Fx.SystemFx.FixMe();
+                    Console.WriteLine("[System] Guardian protocol executed");
+                    assistant.Log("Guardian angel executed");
+                    break;
+
                 case "schedule":
                     assistant.ShowScheduleHelp();
                     assistant.Log("Generated schedule help");

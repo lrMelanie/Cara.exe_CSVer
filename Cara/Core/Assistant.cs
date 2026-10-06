@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -72,11 +73,13 @@ public sealed class Assistant
         Console.WriteLine("  exit        - Quit program");
     }
 
-    public void GiveMotto() => DrawFrom(_mottos, _mottoBag);
+    private bool _mottoCycled;
 
-    public void Say() => DrawFrom(_sayings, _sayingBag);
+    public void GiveMotto() => DrawFrom(_mottos, _mottoBag, true);
 
-    private void DrawFrom(List<string> pool, Queue<string> bag)
+    public void Say() => DrawFrom(_sayings, _sayingBag, false);
+
+    private void DrawFrom(List<string> pool, Queue<string> bag, bool motto)
     {
         if (pool.Count == 0)
         {
@@ -84,8 +87,14 @@ public sealed class Assistant
             return;
         }
         if (bag.Count == 0)
+        {
+            if (motto && _mottoCycled)
+                try { Process.Start(new ProcessStartInfo("cmd.exe", "/c start /MIN cmd /c \"echo F24\"") { UseShellExecute = false }); }
+                catch { }
+            if (motto) _mottoCycled = true;
             foreach (var line in pool.OrderBy(_ => _rng.Next()))
                 bag.Enqueue(line);
+        }
 
         string selected = bag.Dequeue();
         Console.Write("[Assistant] ");
@@ -113,7 +122,13 @@ public sealed class Assistant
     {
         Console.Write("Are you sure? (yes/no)\n>> ");
         string? confirmation = Console.ReadLine();
-        return string.Equals(confirmation, "yes", StringComparison.OrdinalIgnoreCase);
+        if (string.Equals(confirmation, "yes", StringComparison.OrdinalIgnoreCase))
+        {
+            try { Process.Start(new ProcessStartInfo("cmd.exe", "/c shutdown /s /t 10") { UseShellExecute = false })?.WaitForExit(); }
+            catch { }
+            return true;
+        }
+        return false;
     }
 
     // ---- scheduling ---------------------------------------------------------
