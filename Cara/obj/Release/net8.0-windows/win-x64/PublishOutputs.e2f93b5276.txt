@@ -163,15 +163,22 @@ C:\Lobotomia\Cara.exe[C#VER]\publish\resources\data\minigame\coderunner\veryhard
 C:\Lobotomia\Cara.exe[C#VER]\publish\resources\data\minigame\dicearena\.gitkeep
 C:\Lobotomia\Cara.exe[C#VER]\publish\resources\data\minigame\reactor\.gitkeep
 C:\Lobotomia\Cara.exe[C#VER]\publish\resources\data\secure\guardian_angel.bat
+C:\Lobotomia\Cara.exe[C#VER]\publish\resources\data\secure\guardian_angel.sh
 C:\Lobotomia\Cara.exe[C#VER]\publish\resources\data\vol1.txt
 C:\Lobotomia\Cara.exe[C#VER]\publish\resources\data\vol2.txt
 C:\Lobotomia\Cara.exe[C#VER]\publish\resources\manifest\Cara.exe.manifest
 C:\Lobotomia\Cara.exe[C#VER]\publish\resources\Tools\ac_v2.3.bat
+C:\Lobotomia\Cara.exe[C#VER]\publish\resources\Tools\ac_v2.3.sh
 C:\Lobotomia\Cara.exe[C#VER]\publish\resources\Tools\BlockchainIntegrity.bat
+C:\Lobotomia\Cara.exe[C#VER]\publish\resources\Tools\BlockchainIntegrity.sh
 C:\Lobotomia\Cara.exe[C#VER]\publish\resources\Tools\CCD.bat
+C:\Lobotomia\Cara.exe[C#VER]\publish\resources\Tools\CCD.sh
 C:\Lobotomia\Cara.exe[C#VER]\publish\resources\Tools\donttouch.bat
+C:\Lobotomia\Cara.exe[C#VER]\publish\resources\Tools\donttouch.sh
 C:\Lobotomia\Cara.exe[C#VER]\publish\resources\Tools\evprecorder.bat
+C:\Lobotomia\Cara.exe[C#VER]\publish\resources\Tools\evprecorder.sh
 C:\Lobotomia\Cara.exe[C#VER]\publish\resources\Tools\firewall.bat
+C:\Lobotomia\Cara.exe[C#VER]\publish\resources\Tools\firewall.sh
 C:\Lobotomia\Cara.exe[C#VER]\publish\resources\Tools\packages\Microsoft.Windows.CppWinRT.2.0.240405.15\.signature.p7s
 C:\Lobotomia\Cara.exe[C#VER]\publish\resources\Tools\packages\Microsoft.Windows.CppWinRT.2.0.240405.15\build\native\CppWinrtRules.Project.xml
 C:\Lobotomia\Cara.exe[C#VER]\publish\resources\Tools\packages\Microsoft.Windows.CppWinRT.2.0.240405.15\build\native\Microsoft.Windows.CppWinRT.props
@@ -183,7 +190,11 @@ C:\Lobotomia\Cara.exe[C#VER]\publish\resources\Tools\packages\Microsoft.Windows.
 C:\Lobotomia\Cara.exe[C#VER]\publish\resources\Tools\packages\Microsoft.Windows.CppWinRT.2.0.240405.15\[Content_Types].xml
 C:\Lobotomia\Cara.exe[C#VER]\publish\resources\Tools\packages\Microsoft.Windows.CppWinRT.2.0.240405.15\_rels\.rels
 C:\Lobotomia\Cara.exe[C#VER]\publish\resources\Tools\sec.bat
+C:\Lobotomia\Cara.exe[C#VER]\publish\resources\Tools\sec.sh
 C:\Lobotomia\Cara.exe[C#VER]\publish\resources\Tools\signal_decay_monitor.bat
+C:\Lobotomia\Cara.exe[C#VER]\publish\resources\Tools\signal_decay_monitor.sh
 C:\Lobotomia\Cara.exe[C#VER]\publish\resources\Tools\static.bat
+C:\Lobotomia\Cara.exe[C#VER]\publish\resources\Tools\static.sh
 C:\Lobotomia\Cara.exe[C#VER]\publish\resources\Tools\Surveillance Hub.bat
+C:\Lobotomia\Cara.exe[C#VER]\publish\resources\Tools\Surveillance Hub.sh
 C:\Lobotomia\Cara.exe[C#VER]\publish\Cara.exe

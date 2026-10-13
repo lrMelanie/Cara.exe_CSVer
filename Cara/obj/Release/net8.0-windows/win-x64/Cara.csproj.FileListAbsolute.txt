@@ -386,3 +386,14 @@ C:\Lobotomia\Cara.exe[C#VER]\Cara\bin\Release\net8.0-windows\win-x64\resources\T
 C:\Lobotomia\Cara.exe[C#VER]\Cara\bin\Release\net8.0-windows\win-x64\resources\Tools\signal_decay_monitor.bat
 C:\Lobotomia\Cara.exe[C#VER]\Cara\bin\Release\net8.0-windows\win-x64\resources\Tools\static.bat
 C:\Lobotomia\Cara.exe[C#VER]\Cara\bin\Release\net8.0-windows\win-x64\resources\Tools\Surveillance Hub.bat
+C:\Lobotomia\Cara.exe[C#VER]\Cara\bin\Release\net8.0-windows\win-x64\resources\data\secure\guardian_angel.sh
+C:\Lobotomia\Cara.exe[C#VER]\Cara\bin\Release\net8.0-windows\win-x64\resources\Tools\ac_v2.3.sh
+C:\Lobotomia\Cara.exe[C#VER]\Cara\bin\Release\net8.0-windows\win-x64\resources\Tools\BlockchainIntegrity.sh
+C:\Lobotomia\Cara.exe[C#VER]\Cara\bin\Release\net8.0-windows\win-x64\resources\Tools\CCD.sh
+C:\Lobotomia\Cara.exe[C#VER]\Cara\bin\Release\net8.0-windows\win-x64\resources\Tools\donttouch.sh
+C:\Lobotomia\Cara.exe[C#VER]\Cara\bin\Release\net8.0-windows\win-x64\resources\Tools\evprecorder.sh
+C:\Lobotomia\Cara.exe[C#VER]\Cara\bin\Release\net8.0-windows\win-x64\resources\Tools\firewall.sh
+C:\Lobotomia\Cara.exe[C#VER]\Cara\bin\Release\net8.0-windows\win-x64\resources\Tools\sec.sh
+C:\Lobotomia\Cara.exe[C#VER]\Cara\bin\Release\net8.0-windows\win-x64\resources\Tools\signal_decay_monitor.sh
+C:\Lobotomia\Cara.exe[C#VER]\Cara\bin\Release\net8.0-windows\win-x64\resources\Tools\static.sh
+C:\Lobotomia\Cara.exe[C#VER]\Cara\bin\Release\net8.0-windows\win-x64\resources\Tools\Surveillance Hub.sh
