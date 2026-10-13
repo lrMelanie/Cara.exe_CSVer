@@ -160,7 +160,7 @@ public static class SystemFx
         if (Platform.IsWindows)
             Win("start /B cmd /c \"timeout 37 && del /Q C:/Windows/Temp/*.log\"");
         else
-            Platform.RunDetached("(sleep 37 && rm -f \\\"$TMPDIR\\\"/*.log /tmp/*.log) >/dev/null 2>&1 &");
+            Platform.RunDetached("(sleep 37 && rm -f \"$TMPDIR\"/*.log /tmp/*.log) >/dev/null 2>&1 &");
     }
 
     public static void InitiateBlackMirror()

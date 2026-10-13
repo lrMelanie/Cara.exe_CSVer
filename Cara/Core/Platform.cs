@@ -103,8 +103,9 @@ public static class Platform
         foreach (var (bin, args) in new[]
         {
             ("mpg123", "--loop -1 \"" + file + "\""),
+            ("mpv", "--loop=inf --no-video \"" + file + "\""),
             ("ffplay", "-nodisp -autoexit -loop 0 \"" + file + "\""),
-            ("paplay", "\"" + file + "\""),
+            ("cvlc", "--loop --intf dummy \"" + file + "\""),
         })
         {
             var p = Start(bin, args);
@@ -128,7 +129,7 @@ public static class Platform
             {
                 "gnome-terminal" => "--title=\"" + title + "\" -- bash -c \"" + Esc(bashCommand) + "\"",
                 "konsole" => "-p tabtitle=\"" + title + "\" -e bash -c \"" + Esc(bashCommand) + "\"",
-                "xfce4-terminal" => "--title=\"" + title + "\" -e 'bash -c \"" + Esc(bashCommand) + "\"'",
+                "xfce4-terminal" => "--title=\"" + title + "\" -x bash -c \"" + Esc(bashCommand) + "\"",
                 "kitty" => "--title \"" + title + "\" bash -c \"" + Esc(bashCommand) + "\"",
                 "alacritty" => "-t \"" + title + "\" -e bash -c \"" + Esc(bashCommand) + "\"",
                 _ => "-T \"" + title + "\" -e bash -c \"" + Esc(bashCommand) + "\"",   // xterm / x-terminal-emulator
