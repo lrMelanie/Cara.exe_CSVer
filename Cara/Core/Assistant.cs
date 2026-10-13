@@ -5,8 +5,7 @@ using System.Text;
 
 namespace Cara.Core;
 
-/// Core of the virtual assistant: greeting, help, mottos, sarcastic sayings,
-/// scheduling with background reminders, typewriter output and logging.
+/// Virtual assistant core: greeting, help, mottos, schedule + reminders, logging.
 public sealed class Assistant
 {
     private static readonly string ResourceRoot =

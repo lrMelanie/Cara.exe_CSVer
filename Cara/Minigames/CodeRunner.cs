@@ -5,8 +5,7 @@ using static Cara.Ui.ConsoleUi;
 
 namespace Cara.Minigames;
 
-/// Code Runner: transcribe lines of source under a shrinking time trace,
-/// escalating difficulty, with selectable repositories and a hidden mode.
+/// Code Runner: transcribe source against a shrinking timer; matrix + hidden modes.
 public sealed class CodeRunner
 {
     private static readonly string RepDir =
@@ -20,7 +19,7 @@ public sealed class CodeRunner
     {
         _repositoryFiles = LoadActiveRepositories();
         if ((GetAsyncKeyState(VkF12) & 0x8000) != 0)
-            _repositoryFiles.AddRange(new[] { Og(1), Og(2), Og(3), Og(4) });
+            for (int n = 1; n <= 4; n++) { var f = Og(n); if (File.Exists(f)) _repositoryFiles.Add(f); }
         LoadHighScore();
     }
 
@@ -68,8 +67,8 @@ public sealed class CodeRunner
 
         if (active.Count == 0)
         {
-            if (File.Exists(Rep("repository1.txt"))) active.Add(Rep("repository1.txt"));
-            if (File.Exists(Rep("repository5.txt"))) active.Add(Rep("repository5.txt"));
+            if (File.Exists(Rep("easy_csharp.txt"))) active.Add(Rep("easy_csharp.txt"));
+            if (File.Exists(Rep("easy_js.txt"))) active.Add(Rep("easy_js.txt"));
         }
         return active;
     }
@@ -215,6 +214,18 @@ public sealed class CodeRunner
         return Gauge(rem, max, col);
     }
 
+    // time recovered per segment: +0.5s per difficulty tier (easy 4.0 .. fun 6.0)
+    private static double SegmentBonus(string path)
+    {
+        string name = Path.GetFileName(path);
+        const double baseBonus = 4.0;
+        if (name.StartsWith("medium_")) return baseBonus + 0.5;
+        if (name.StartsWith("hard_")) return baseBonus + 1.0;
+        if (name.StartsWith("veryhard_")) return baseBonus + 1.5;
+        if (name.StartsWith("impossible_")) return baseBonus + 2.0;
+        return baseBonus;
+    }
+
     private void BootSequence()
     {
         Cls(); HideCur();
@@ -250,9 +261,7 @@ public sealed class CodeRunner
         Thread.Sleep(45);
     }
 
-    // Redraws the whole frame from the top (no full clear -> no flicker) and
-    // shows the typed buffer coloured per character: green where it matches the
-    // target, red on the first typo (real-time, WTTG style).
+    // redraw from top (no flicker); typed chars green on match, red on typo
     private void RenderTyping(int rem, int max, List<string> lines, int cur, string typed, string target)
     {
         var o = new StringBuilder();
@@ -285,8 +294,7 @@ public sealed class CodeRunner
         ShowCur();
     }
 
-    // Reads the current line character by character with live colouring and a
-    // live time trace. Returns (timedOut, typed); timedOut ends the run.
+    // read one line live; returns (timedOut, typed) - timedOut ends the run
     private (bool timedOut, string typed) TypeLine(List<string> lines, int cur, DateTime endTime, int maxS)
     {
         var sb = new StringBuilder();
@@ -362,15 +370,25 @@ public sealed class CodeRunner
 
             while (true)
             {
+                if (_repositoryFiles.Count == 0)
+                {
+                    Console.Write(Red + "  [FATAL] no source nodes available\n" + Rst);
+                    Thread.Sleep(1200);
+                    SaveHighScore();
+                    return;
+                }
                 if (_rng.Next(0, 13) == 0) Glitch();
                 Cara.Fx.Haunt.Maybe(250);
-                var lines = LoadRepositoryFile(_repositoryFiles[_rng.Next(_repositoryFiles.Count)]);
+                string repoPath = _repositoryFiles[_rng.Next(_repositoryFiles.Count)];
+                double bonus = SegmentBonus(repoPath);
+                var lines = LoadRepositoryFile(repoPath);
                 var current = GetConsecutiveLines(lines, _linesToType);
 
                 if (current.Count == 0)
                 {
                     Console.Write(Red + "  [FATAL] corrupt source node\n" + Rst);
                     Thread.Sleep(1200);
+                    SaveHighScore();
                     return;
                 }
 
@@ -384,10 +402,14 @@ public sealed class CodeRunner
                         _points++;
                         i++;
                         DateTime cap = DateTime.Now.AddSeconds(MaxS);
-                        endTime = endTime.AddSeconds(4);
+                        DateTime before = endTime;
+                        endTime = endTime.AddSeconds(bonus);
                         if (endTime > cap) endTime = cap;
                         if (_points % 7 == 0) _linesToType++;
-                        Console.Write(Grn2 + "   [GRANTED] segment accepted  +4s" + Rst);
+                        double gained = (endTime - before).TotalSeconds;
+                        if (gained < 0) gained = 0;
+                        string bs = gained.ToString("0.#", System.Globalization.CultureInfo.InvariantCulture);
+                        Console.Write(Grn2 + "   [GRANTED] segment accepted  +" + bs + "s" + Rst);
                         Thread.Sleep(180);
                     }
                     else
@@ -406,6 +428,7 @@ public sealed class CodeRunner
             if (cmd == "restart" || cmd == "play again" || cmd == "again") continue;
             Console.Write(Red + "  unknown command - 'restart' or 'exit'\n" + Rst);
             Thread.Sleep(1000);
+            goto gameOver;
         }
     }
 
@@ -440,7 +463,9 @@ public sealed class CodeRunner
             else if (cl == "open coderunner_alpha.exe" || cl == "run coderunner_alpha.exe")
             {
                 var saved = _repositoryFiles;
-                _repositoryFiles = new List<string> { Og(1), Og(2), Og(3), Og(4) };
+                var og = new List<string>();
+                for (int n = 1; n <= 4; n++) { var f = Og(n); if (File.Exists(f)) og.Add(f); }
+                _repositoryFiles = og;
                 PlayGame();
                 _repositoryFiles = saved;
             }
@@ -466,7 +491,7 @@ public sealed class CodeRunner
             ConsoleKeyInfo k = Console.ReadKey(intercept: true);
             if (k.Key == ConsoleKey.Escape) break;
 
-            // secret: typing 2025 unlocks the Old Files category
+            // secret: 2025 unlocks Old Files
             if (!unlocked && char.IsDigit(k.KeyChar))
             {
                 codeBuf += k.KeyChar;

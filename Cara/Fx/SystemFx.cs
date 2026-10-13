@@ -4,9 +4,7 @@ using System.Text;
 
 namespace Cara.Fx;
 
-/// System-level "horror/hacker" routines, ported 1:1 from main.cpp.
-/// WARNING: these really touch the machine (network, registry, camera,
-/// shutdown). Faithful to the original C++ behavior.
+/// System horror/hacker routines ported 1:1 from main.cpp (really touch the machine).
 public static class SystemFx
 {
     private static readonly Random Rng = new();

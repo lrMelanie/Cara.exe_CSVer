@@ -2,8 +2,7 @@ using static Cara.Ui.ConsoleUi;
 
 namespace Cara.Minigames;
 
-/// Dice Arena: roll 3 dice each turn, assign each to attack / block / heal
-/// against escalating "process" foes. Slice & Dice style.
+/// Dice Arena: assign 3 dice to attack/block/heal vs escalating process foes.
 public sealed class DiceArena
 {
     private static readonly string BestPath =

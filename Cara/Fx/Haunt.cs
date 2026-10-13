@@ -2,9 +2,7 @@ using System.Diagnostics;
 
 namespace Cara.Fx;
 
-/// Atmospheric "haunting": launches the stray .bat effects from
-/// resources/Tools/ - as hidden codes, rare minigame jumpscares, or a very
-/// rare ambient trigger. All of them are harmless window/visual gags.
+/// Haunting: fires the resources/Tools/ .bat gags (hidden codes, jumpscares, ambient).
 public static class Haunt
 {
     private static readonly string ToolsDir =

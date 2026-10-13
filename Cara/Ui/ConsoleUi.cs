@@ -3,8 +3,7 @@ using System.Text;
 
 namespace Cara.Ui;
 
-/// Shared console helpers: ANSI colors, screen control and framed-box drawing,
-/// so every minigame renders in the same style.
+/// Shared console helpers: ANSI colors, screen control, framed-box drawing.
 public static class ConsoleUi
 {
     public const string Rst = "\x1b[0m";

@@ -2,8 +2,7 @@ using static Cara.Ui.ConsoleUi;
 
 namespace Cara.Minigames;
 
-/// Reactor Core minigame: SIMPLE (classic temperature control) and
-/// EXTENDED (pressure, coolant, random events, meltdown/scram).
+/// Reactor Core: SIMPLE, EXTENDED and real-time ReactorRL (city grid) modes.
 public sealed class Reactor
 {
     private static readonly string BestPath =
@@ -24,7 +23,8 @@ public sealed class Reactor
             Console.WriteLine(Hline("╠", "╣"));
             Console.WriteLine(Row("   [1] SIMPLE CORE    (classic reactor)"));
             Console.WriteLine(Row("   [2] EXTENDED CORE (pressure, coolant, events)"));
-            Console.WriteLine(Row("   [3] BACK"));
+            Console.WriteLine(Row("   [3] REACTOR RL   (real-time, live city grid)"));
+            Console.WriteLine(Row("   [4] BACK"));
             Console.WriteLine(Hline("╚", "╝"));
             Console.Write(Rst);
             Console.Write(Grn + "\n  root@cara:~# " + Rst);
@@ -33,7 +33,8 @@ public sealed class Reactor
             string c = Console.ReadLine() ?? "";
             if (c == "1") PlaySimple();
             else if (c == "2") PlayExtended();
-            else if (c == "3") break;
+            else if (c == "3") PlayReactorRL();
+            else if (c == "4") break;
             else { Console.Write(Red + "  unknown option." + Rst); Thread.Sleep(900); }
         }
         ShowCur();
@@ -64,6 +65,136 @@ public sealed class Reactor
             }
             catch { }
         }
+    }
+
+    // ReactorRL: real-time core; power city districts, manage rods/coolant, don't melt.
+    private void PlayReactorRL()
+    {
+        string rlPath = Path.Combine(AppContext.BaseDirectory, "resources", "data", "minigame", "reactor", "rl_best.txt");
+        int rlBest = 0;
+        try { if (File.Exists(rlPath) && int.TryParse(File.ReadAllText(rlPath).Trim(), out int b)) rlBest = b; } catch { }
+
+        string[] cities = { "VARREN CITY", "NULLHAVEN", "GREYMOOR", "ASHFORD-7" };
+        string city = cities[_rng.Next(cities.Length)];
+        string[] dName = { "Old Town", "Harbor", "Heights", "Foundry", "Hospital" };
+        int[] dLoad = { 14, 20, 12, 28, 10 };
+        for (int i = 0; i < dLoad.Length; i++) dLoad[i] += _rng.Next(-2, 3);
+        bool[] dOn = { true, false, false, false, true };
+
+        const int Rated = 90;
+        double temp = 30, coolant = 100, score = 0, simTime = 0;
+        int rods = 50;
+        bool pumpOn = false, scram = false;
+
+        Cls(); HideCur();
+        DateTime last = DateTime.Now;
+
+        while (true)
+        {
+            DateTime now = DateTime.Now;
+            double dt = (now - last).TotalSeconds;
+            last = now;
+            if (dt > 0.25) dt = 0.25;
+
+            Cara.Fx.Haunt.Maybe(2000);
+
+            double r = 1.0 - rods / 100.0;
+            int cap = (int)(Rated * r);
+            int load = 0;
+            for (int i = 0; i < dOn.Length; i++) if (dOn[i]) load += dLoad[i];
+            int served = Math.Min(load, cap);
+            int unmet = load - served;
+
+            double heatIn = 0.5 + 0.18 * served + 4.0 * r + 0.8 * Math.Min(unmet, 20);
+            double heatOut = (pumpOn && coolant > 0) ? 12.0 : 4.0;
+            temp += (heatIn - heatOut) * dt;
+            if (temp < 10) temp = 10;
+
+            coolant += (pumpOn && coolant > 0 ? -8.0 : 4.0) * dt;
+            if (coolant < 0) coolant = 0;
+            if (coolant > 100) coolant = 100;
+
+            score += served * dt;
+            simTime += dt;
+
+            if (temp >= 100)
+            {
+                Cls(); HideCur();
+                Console.Write(Red + Bold);
+                Console.WriteLine(Hline("╔", "╗"));
+                Console.WriteLine(Row("        M E L T D O W N   -   " + city));
+                Console.WriteLine(Hline("╚", "╝"));
+                Console.Write(Rst);
+                for (int k = 5; k >= 1; k--) { Console.Write(Red + "\n        core breach in " + k + Rst + "\n"); Thread.Sleep(320); }
+                int fs = (int)score;
+                if (fs > rlBest) { try { Directory.CreateDirectory(Path.GetDirectoryName(rlPath)!); File.WriteAllText(rlPath, fs.ToString()); } catch { } }
+                Console.Write(Grn + "\n   delivered : " + fs + " MW.s\n   best : " + Math.Max(fs, rlBest) + "\n");
+                Pause("press Enter...");
+                return;
+            }
+
+            RenderRl(city, temp, coolant, rods, r, cap, load, served, unmet, pumpOn, (int)score, (int)simTime, rlBest, dName, dLoad, dOn);
+
+            while (Console.KeyAvailable)
+            {
+                ConsoleKeyInfo key = Console.ReadKey(intercept: true);
+                char ch = char.ToLowerInvariant(key.KeyChar);
+                if (key.Key == ConsoleKey.UpArrow || ch == 'w') rods = Math.Max(0, rods - 5);
+                else if (key.Key == ConsoleKey.DownArrow || ch == 's') rods = Math.Min(100, rods + 5);
+                else if (ch == 'c') pumpOn = !pumpOn;
+                else if (ch == 'q') scram = true;
+                else if (ch >= '1' && ch <= '5') dOn[ch - '1'] = !dOn[ch - '1'];
+            }
+            if (scram) break;
+
+            Thread.Sleep(90);
+        }
+
+        Cls(); HideCur();
+        int final = (int)score;
+        if (final > rlBest) { try { Directory.CreateDirectory(Path.GetDirectoryName(rlPath)!); File.WriteAllText(rlPath, final.ToString()); } catch { } }
+        Console.Write(Grn2 + Bold);
+        Console.WriteLine(Hline("╔", "╗"));
+        Console.WriteLine(Row("        SCRAM - " + city + " OFFLINE, CORE SAFE"));
+        Console.WriteLine(Hline("╚", "╝"));
+        Console.Write(Rst);
+        Console.Write(Grn + "\n   uptime : " + (int)simTime + "s\n   delivered : " + final + " MW.s\n   best : " + Math.Max(final, rlBest) + "\n");
+        if (final >= rlBest) Console.Write(Yel + "\n   >> NEW RECORD <<\n" + Rst);
+        Pause("press Enter...");
+    }
+
+    private static void RenderRl(string city, double temp, double coolant, int rods, double r, int cap,
+        int load, int served, int unmet, bool pumpOn, int score, int time, int best,
+        string[] dName, int[] dLoad, bool[] dOn)
+    {
+        int ti = (int)temp, ci = (int)coolant, ri = 100 - rods;
+        string tcol = temp < 50 ? Grn : temp < 80 ? Yel : Red;
+        string status = temp < 50 ? "NOMINAL" : temp < 80 ? "RISING" : temp < 95 ? "CRITICAL" : "MELTDOWN IMMINENT";
+
+        var sb = new System.Text.StringBuilder();
+        sb.Append("\x1b[H");
+        sb.Append(Grn).Append(Hline("╔", "╗")).Append("\x1b[K\n");
+        sb.Append(Row("  REACTOR RL // " + city + "        [ LIVE ]")).Append("\x1b[K\n");
+        sb.Append(Hline("╠", "╣")).Append("\x1b[K\n");
+        sb.Append(Row("  TIME " + time + "s    DELIVERED " + score + " MW.s    BEST " + best)).Append("\x1b[K\n");
+        sb.Append(Hline("╚", "╝")).Append(Rst).Append("\x1b[K\n");
+        sb.Append("\x1b[K\n");
+        sb.Append("   CORE  ").Append(Gauge(ti, 100, tcol)).Append("  ").Append(tcol).Append(ti).Append("/100  ").Append(status).Append(Rst).Append("\x1b[K\n");
+        sb.Append("   COOL  ").Append(Gauge(ci, 100, Cyan)).Append("  ").Append(Cyan).Append(ci).Append("/100  ").Append(pumpOn ? "PUMP ON" : "pump off").Append(Rst).Append("\x1b[K\n");
+        sb.Append("   RODS  ").Append(Gauge(ri, 100, Grn2)).Append("  react ").Append(ri).Append("%  cap ").Append(cap).Append("MW").Append(Rst).Append("\x1b[K\n");
+        sb.Append("\x1b[K\n");
+        sb.Append("   GRID  demand ").Append(load).Append("MW   supplied ").Append(served).Append("MW");
+        if (unmet > 0) sb.Append(Red).Append("   BROWNOUT -").Append(unmet).Append("MW (overheats! up=power)").Append(Rst);
+        sb.Append("\x1b[K\n");
+        sb.Append("\x1b[K\n");
+        sb.Append(Gry).Append("   DISTRICTS").Append(Rst).Append("\x1b[K\n");
+        for (int i = 0; i < dName.Length; i++)
+            sb.Append("    [").Append(i + 1).Append("] ").Append(dName[i].PadRight(10)).Append(dLoad[i]).Append("MW  ")
+              .Append(dOn[i] ? Grn + "ON" : Grn2 + "off").Append(Rst).Append("\x1b[K\n");
+        sb.Append("\x1b[K\n");
+        sb.Append(Gry).Append("   [1-5] district   C pump   up/down or W/S rods   Q scram").Append(Rst).Append("\x1b[K\n");
+        sb.Append("\x1b[J");
+        Console.Write(sb.ToString());
     }
 
     private void PlaySimple()
