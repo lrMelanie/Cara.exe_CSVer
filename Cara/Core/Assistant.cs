@@ -68,6 +68,14 @@ public sealed class Assistant
         Console.WriteLine("  motto       - Show life motto");
         Console.WriteLine("  say         - Assistant says something");
         Console.WriteLine("  schedule    - Manage events");
+        Console.WriteLine("  note        - Quick notes (add/list/remove/clear)");
+        Console.WriteLine("  calc <expr> - Calculate an expression");
+        Console.WriteLine("  base <n>    - Convert dec/hex/bin/oct");
+        Console.WriteLine("  timer <t>   - Countdown (e.g. 5m, 90s, 1h30m)");
+        Console.WriteLine("  genpass [n] - Generate a password");
+        Console.WriteLine("  sysinfo     - Show system info");
+        Console.WriteLine("  clock       - Live world clock");
+        Console.WriteLine("  hud         - Open the desktop dashboard");
         Console.WriteLine("  minigame    - Test Yourself");
         Console.WriteLine("  exit        - Quit program");
     }

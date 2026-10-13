@@ -10,16 +10,25 @@ internal static class Program
     private const string Rst = "\x1b[0m";
     private const string Grn = "\x1b[38;5;46m";
 
-    private static void Main()
+    private static void Main(string[] args)
     {
         Console.OutputEncoding = Encoding.UTF8;
-        Console.InputEncoding = Encoding.UTF8;
+        try { Console.InputEncoding = Encoding.UTF8; } catch { }
         EnableVirtualTerminal();
+
+        // spawned side pane (code wall / node scan) during the hacker boot
+        if (args.Length >= 2 && args[0] == "--pane")
+        {
+            int col = args.Length > 2 && int.TryParse(args[2], out int c) ? c : 1;
+            Cara.Fx.BootPanes.RunPane(args[1], col);
+            return;
+        }
+
         Directory.SetCurrentDirectory(AppContext.BaseDirectory);
 
         var assistant = new Assistant();
 
-        Loader.ShowLoading();
+        Cara.Fx.BootPanes.LaunchHackerBoot();
         Console.Clear();
         ShowLogotype();
         Thread.Sleep(600);
@@ -35,6 +44,27 @@ internal static class Program
             if (command.StartsWith("schedule ", StringComparison.Ordinal))
             {
                 assistant.ProcessScheduleCommand(command["schedule ".Length..]);
+                continue;
+            }
+
+            if (command.StartsWith("calc ", StringComparison.Ordinal))
+            { Tools.Calc(command["calc ".Length..]); assistant.Log("calc"); continue; }
+
+            if (command.StartsWith("timer ", StringComparison.Ordinal))
+            { Tools.Timer(command["timer ".Length..]); assistant.Log("timer"); continue; }
+
+            if (command.StartsWith("base ", StringComparison.Ordinal))
+            { Tools.BaseConv(command["base ".Length..]); assistant.Log("base"); continue; }
+
+            if (command.StartsWith("genpass ", StringComparison.Ordinal))
+            { Tools.GenPass(command["genpass ".Length..]); assistant.Log("genpass"); continue; }
+
+            if (command.Equals("note", StringComparison.Ordinal) || command.Equals("notes", StringComparison.Ordinal)
+                || command.StartsWith("note ", StringComparison.Ordinal) || command.StartsWith("notes ", StringComparison.Ordinal))
+            {
+                int sp = command.IndexOf(' ');
+                Tools.Notes(sp < 0 ? "" : command[(sp + 1)..]);
+                assistant.Log("notes");
                 continue;
             }
 
@@ -94,6 +124,29 @@ internal static class Program
                     Cara.Minigames.MinigameMenu.Run();
                     ShowLogotype();
                     assistant.ShowHelp();
+                    break;
+
+                case "sysinfo":
+                    Tools.SysInfo();
+                    assistant.Log("sysinfo");
+                    break;
+
+                case "clock":
+                case "worldclock":
+                    Tools.Clock();
+                    assistant.Log("clock");
+                    break;
+
+                case "genpass":
+                    Tools.GenPass("");
+                    assistant.Log("genpass");
+                    break;
+
+                case "hud":
+                case "desktop":
+                    assistant.Log("Launching desktop");
+                    Cara.Ui.Hud.Run();
+                    ShowLogotype();
                     break;
 
                 case "exit":

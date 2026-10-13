@@ -1,29 +1,67 @@
+using static Cara.Ui.ConsoleUi;
+
 namespace Cara.Core;
 
-/// Startup loading bar and the ASCII logotype (ported 1:1 from load.cpp).
+/// Startup boot: scrolling system log + progress bar, then the logotype.
 public static class Loader
 {
-    private const string LoadingChars = "#-";
-    private const int LoadingWidth = 50;
+    private static readonly string[] BootLines =
+    {
+        "loading kernel image ...............",
+        "mounting /dev/cara .................",
+        "probing hardware bus ...............",
+        "init service host: dhcp client .....",
+        "init service host: dns client ......",
+        "init service host: event log .......",
+        "calibrating audio subsystem ........",
+        "linking neural lattice .............",
+        "decrypting personality matrix ......",
+        "loading motto cache ................",
+        "loading saying cache ...............",
+        "spinning up reminder daemon ........",
+        "verifying resource integrity .......",
+        "scanning minigame repositories .....",
+        "arming haunt triggers ..............",
+        "allocating console panes ...........",
+        "establishing uplink ................",
+        "negotiating session keys ...........",
+        "syncing world clock ................",
+        "finalizing boot ....................",
+    };
 
     public static void ShowLoading()
     {
-        Console.Clear();
-        Console.WriteLine("SYSTEM INITIALIZATION");
-        Console.Write("[");
-        for (int i = 0; i < LoadingWidth; i++)
+        Cls(); HideCur();
+        Console.Write(Grn + Bold + "  CARA // SYSTEM BOOT\n" + Rst);
+        Console.Write(Gry + "  " + new string('-', 52) + "\n\n" + Rst);
+
+        var rng = new Random();
+        int total = BootLines.Length;
+        for (int i = 0; i < total; i++)
         {
-            Console.Write(LoadingChars[i % LoadingChars.Length]);
-            Thread.Sleep(50 + i * 15);
+            int pct = (i + 1) * 100 / total;
+            Console.Write(Grn2 + "  " + BootLines[i] + Rst);
+            Thread.Sleep(55 + rng.Next(0, 110));
+            Console.Write(rng.Next(0, 14) != 0 ? Grn + " [  OK  ]" : Yel + " [ WARN ]");
+            Console.Write(Gry + "  " + pct + "%\n" + Rst);
+            Thread.Sleep(25);
         }
-        Console.WriteLine("]");
+
+        Console.Write("\n  " + Grn + "[");
+        const int w = 52;
+        for (int i = 0; i < w; i++)
+        {
+            Console.Write("\u2588");
+            Thread.Sleep(12 + i / 5);
+        }
+        Console.Write("]" + Bold + "  READY\n" + Rst);
+        Thread.Sleep(400);
+        ShowCur();
     }
 
     public static void ShowLogotype()
     {
-        const string grn = "\x1b[38;5;46m";
-        const string rst = "\x1b[0m";
-        Console.WriteLine(grn +
+        Console.WriteLine(Grn +
             "----------------------------------\n" +
             "  _____          _____             \n" +
             " / ____|   /\\   |  __ \\     /\\     \n" +
@@ -31,6 +69,6 @@ public static class Loader
             "| |      / /\\ \\ |  _  /   / /\\ \\   \n" +
             "| |____ / ____ \\| | \\ \\  / ____ \\  \n" +
             " \\_____/_/    \\_\\_|  \\_\\/_/    \\_\\ \n" +
-            "----------------------------------" + rst);
+            "----------------------------------" + Rst);
     }
 }
