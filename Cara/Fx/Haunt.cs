@@ -76,7 +76,16 @@ public static class Haunt
     // Returns true if the input was a hidden effect code (and fired it).
     public static bool TryCode(string input)
     {
-        if (Codes.TryGetValue(input, out string? bat)) { Launch(bat); return true; }
+        if (Codes.TryGetValue(input, out string? bat)) { Launch(bat); PaneReact(bat); return true; }
         return false;
+    }
+
+    // Side panels take on the theme of the hidden code that was typed.
+    private static void PaneReact(string batName)
+    {
+        string n = Path.GetFileNameWithoutExtension(batName).ToLowerInvariant();
+        if (n.Contains("surveillance") || n.Contains("static") || n.Contains("donttouch")) Panes.Watch();
+        else if (n.Contains("firewall") || n.Contains("ccd") || n.Contains("blockchain")) Panes.Breach();
+        else Panes.Signal();   // signal_decay, evprecorder, ac_v2.3, sec
     }
 }

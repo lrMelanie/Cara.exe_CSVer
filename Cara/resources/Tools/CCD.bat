@@ -1,24 +1,42 @@
 @echo off
+setlocal enabledelayedexpansion
 color 0A
 title Cryptic Cypher Decoder
 
-for /f %%A in ('powershell -Command "[System.Windows.Forms.Screen]::PrimaryScreen.Bounds.Width"') do set "width=%%A"
-for /f %%A in ('powershell -Command "[System.Windows.Forms.Screen]::PrimaryScreen.Bounds.Height"') do set "height=%%A"
+set "U=%USERNAME%"
 
-if "%width%"=="" set "width=1920"
-if "%height%"=="" set "height=1080"
-
-set /a maxX=width-500
-set /a maxY=height-300
-if %maxX% lss 1 set "maxX=1"
-if %maxY% lss 1 set "maxY=1"
-
-powershell -Command "Add-Type -TypeDefinition 'using System;using System.Runtime.InteropServices;using System.Diagnostics;public class WinMover{[DllImport(\"user32.dll\")]public static extern bool MoveWindow(IntPtr hWnd,int X,int Y,int W,int H,bool bRepaint);public static void MoveMyWindow(int maxX,int maxY){IntPtr h=Process.GetCurrentProcess().MainWindowHandle;Random r=new Random();MoveWindow(h,r.Next(0,maxX),r.Next(0,maxY),500,300,true);}}';[WinMover]::MoveMyWindow(%maxX%,%maxY%)"
-
-:break
-set /a "num=!random! %% 999999"
-echo Decrypting: %num% 
-powershell -Command "[Console]::Beep(500,100)"
-ping -n 1 localhost >nul
 cls
-goto break
+echo   CRYPTIC CYPHER DECODER
+echo.
+echo   ^> target: C:\Users\%U%
+echo   ^> enumerating private keys .....
+ping -n 2 127.0.0.1 >nul
+echo.
+
+:loop
+set /a "fi=!random! %% 10"
+set "f=passwords.kdbx"
+if !fi!==1 set "f=wallet.dat"
+if !fi!==2 set "f=Documents\diary_2019.txt"
+if !fi!==3 set "f=Documents\tax_return.pdf"
+if !fi!==4 set "f=Downloads\DO_NOT_OPEN.zip"
+if !fi!==5 set "f=Pictures\private\IMG_0!random!.jpg"
+if !fi!==6 set "f=.ssh\id_rsa"
+if !fi!==7 set "f=AppData\browser_history.sqlite"
+if !fi!==8 set "f=AppData\saved_logins.json"
+if !fi!==9 set "f=Documents\last_will.docx"
+echo   decrypting C:\Users\%U%\!f!
+<nul set /p "=   ["
+for /l %%p in (1,1,20) do ( <nul set /p "=#" & ping -n 1 127.0.0.1 >nul )
+echo ] 100%%
+set /a "kb=!random! %% 9000 + 1000"
+echo   -^> exfiltrated !kb! KB
+powershell -c "[console]::beep(500,90)" >nul 2>&1
+set /a "w=!random! %% 4"
+if !w!==0 (
+  echo   we have read everything, %U%.
+  powershell -c "[console]::beep(120,500)" >nul 2>&1
+  ping -n 2 127.0.0.1 >nul
+)
+echo.
+goto loop

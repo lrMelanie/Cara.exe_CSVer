@@ -1,26 +1,39 @@
 @echo off
 setlocal enabledelayedexpansion
+color 0B
 title Static Echo Chamber
-powershell -Command "$Host.UI.RawUI.BackgroundColor = 'Black'; $Host.UI.RawUI.ForegroundColor = 'DarkCyan'"
 
-for /f %%A in ('powershell -Command "[System.Windows.Forms.Screen]::PrimaryScreen.Bounds.Width"') do set "width=%%A"
-for /f %%A in ('powershell -Command "[System.Windows.Forms.Screen]::PrimaryScreen.Bounds.Height"') do set "height=%%A"
+set "U=%USERNAME%"
 
-if "%width%"=="" set "width=1920"
-if "%height%"=="" set "height=1080"
-
-set /a maxX=width-500
-set /a maxY=height-300
-if %maxX% lss 1 set "maxX=1"
-if %maxY% lss 1 set "maxY=1"
-
-powershell -Command "Add-Type -TypeDefinition 'using System;using System.Runtime.InteropServices;using System.Diagnostics;public class WinMover{[DllImport(\"user32.dll\")]public static extern bool MoveWindow(IntPtr hWnd,int X,int Y,int W,int H,bool bRepaint);public static void MoveMyWindow(int maxX,int maxY){IntPtr h=Process.GetCurrentProcess().MainWindowHandle;Random r=new Random();MoveWindow(h,r.Next(0,maxX),r.Next(0,maxY),500,300,true);}}';[WinMover]::MoveMyWindow(%maxX%,%maxY%)"
+cls
+echo   STATIC ECHO CHAMBER
+echo.
+echo   ^> listening .....
+ping -n 2 127.0.0.1 >nul
+echo.
 
 :loop
-set /a "char=!RANDOM! %% 94 + 33"
-cmd /c exit !char!
-for /f "skip=1 delims=;" %%A in ('echo prompt $E^| cmd') do set "escape=%%A"
-set "ascii=!escape![38;5;!char!m■"
-echo !ascii! !ascii! !ascii! !ascii! !ascii! !ascii! !ascii!
-ping -n 1 127.0.0.1 > nul
+set /a "p=!random! %% 8"
+set "base=hello"
+if !p!==1 set "base=is anyone there"
+if !p!==2 set "base=%U%"
+if !p!==3 set "base=let me out"
+if !p!==4 set "base=i am fine"
+if !p!==5 set "base=i want to go home"
+if !p!==6 set "base=stop"
+if !p!==7 set "base=who said that"
+echo   you: "!base!"
+ping -n 1 127.0.0.1 >nul
+for /l %%e in (1,1,5) do (
+  echo       echo: "!base!"
+  ping -n 1 127.0.0.1 >nul
+)
+set /a "w=!random! %% 5"
+if !w!==0 (
+  echo       echo: "that was not your voice, %U%"
+  powershell -c "[console]::beep(110,500)" >nul 2>&1
+  ping -n 2 127.0.0.1 >nul
+)
+powershell -c "[console]::beep(400,80)" >nul 2>&1
+echo.
 goto loop

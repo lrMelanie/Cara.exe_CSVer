@@ -12,6 +12,51 @@ public static class Platform
     [SupportedOSPlatformGuard("linux")]
     public static bool IsLinux => OperatingSystem.IsLinux();
 
+    /// True if the process already has admin/root.
+    public static bool IsElevated()
+    {
+        try
+        {
+            if (IsWindows) return IsAdminWindows();
+            if (IsLinux) return geteuid() == 0;
+        }
+        catch { }
+        return false;
+    }
+
+    [SupportedOSPlatform("windows")]
+    private static bool IsAdminWindows()
+    {
+        using var id = System.Security.Principal.WindowsIdentity.GetCurrent();
+        return new System.Security.Principal.WindowsPrincipal(id).IsInRole(System.Security.Principal.WindowsBuiltInRole.Administrator);
+    }
+
+    [System.Runtime.InteropServices.DllImport("libc", EntryPoint = "geteuid")]
+    private static extern uint geteuid();
+
+    /// Run a command with admin/root. Already elevated -> run directly; else prompt
+    /// (UAC on Windows, PolicyKit/pkexec or a sudo terminal on Linux). One prompt per call.
+    public static void RunElevated(string command)
+    {
+        try
+        {
+            if (IsElevated()) { Run(command); return; }
+            if (IsWindows)
+            {
+                Process.Start(new ProcessStartInfo("cmd.exe", "/c " + command)
+                { UseShellExecute = true, Verb = "runas", WorkingDirectory = AppContext.BaseDirectory });
+            }
+            else
+            {
+                // keep the elevated shell in the app dir so relative resource paths resolve
+                string wrapped = "cd \"" + AppContext.BaseDirectory + "\" 2>/dev/null; " + command;
+                if (Start("pkexec", "bash -c \"" + Esc(wrapped) + "\"") == null)
+                    SpawnTerminal("CARA ELEVATE", "sudo bash -c \"" + Esc(wrapped) + "\"; echo; echo [done]; sleep 2");
+            }
+        }
+        catch { }
+    }
+
     /// Run a shell command through cmd.exe (Windows) or /bin/bash (Linux), wait, return exit code.
     public static int Run(string command)
     {

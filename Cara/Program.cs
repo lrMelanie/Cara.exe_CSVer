@@ -46,25 +46,27 @@ internal static class Program
 
             if (command.StartsWith("schedule ", StringComparison.Ordinal))
             {
+                Cara.Fx.Panes.Time();
                 assistant.ProcessScheduleCommand(command["schedule ".Length..]);
                 continue;
             }
 
             if (command.StartsWith("calc ", StringComparison.Ordinal))
-            { Tools.Calc(command["calc ".Length..]); assistant.Log("calc"); continue; }
+            { Cara.Fx.Panes.Calc(); Tools.Calc(command["calc ".Length..]); assistant.Log("calc"); continue; }
 
             if (command.StartsWith("timer ", StringComparison.Ordinal))
-            { Tools.Timer(command["timer ".Length..]); assistant.Log("timer"); continue; }
+            { Cara.Fx.Panes.Timer(); Tools.Timer(command["timer ".Length..]); assistant.Log("timer"); continue; }
 
             if (command.StartsWith("base ", StringComparison.Ordinal))
-            { Tools.BaseConv(command["base ".Length..]); assistant.Log("base"); continue; }
+            { Cara.Fx.Panes.Secure("base"); Tools.BaseConv(command["base ".Length..]); assistant.Log("base"); continue; }
 
             if (command.StartsWith("genpass ", StringComparison.Ordinal))
-            { Tools.GenPass(command["genpass ".Length..]); assistant.Log("genpass"); continue; }
+            { Cara.Fx.Panes.Secure("genpass"); Tools.GenPass(command["genpass ".Length..]); assistant.Log("genpass"); continue; }
 
             if (command.Equals("note", StringComparison.Ordinal) || command.Equals("notes", StringComparison.Ordinal)
                 || command.StartsWith("note ", StringComparison.Ordinal) || command.StartsWith("notes ", StringComparison.Ordinal))
             {
+                Cara.Fx.Panes.Archive();
                 int sp = command.IndexOf(' ');
                 Tools.Notes(sp < 0 ? "" : command[(sp + 1)..]);
                 assistant.Log("notes");
@@ -74,50 +76,59 @@ internal static class Program
             switch (command)
             {
                 case "WELCOMETOTHEGAME":
+                    Cara.Fx.Panes.Ritual();
                     Cara.Fx.SystemFx.ExecuteWelcomeSequence();
                     assistant.Log("You such a idiot");
                     break;
 
                 case "A.L.I.V.E":
+                    Cara.Fx.Panes.Watch();
                     Cara.Fx.SystemFx.ExecuteSpectralBroadcast();
                     Console.WriteLine("[System] Audio calibration complete");
                     assistant.Log("Audio calibration complete");
                     break;
 
                 case "HELP-ME":
+                    Cara.Fx.Panes.Breach();
                     Cara.Fx.SystemFx.TriggerPhantomProtocol();
                     Console.WriteLine("[System] Diagnostic tools activated");
                     assistant.Log("Diagnostic tools activated");
                     break;
 
                 case "D0N'T-L00K-B3H1ND-Y0U":
+                    Cara.Fx.Panes.Signal();
                     Cara.Fx.SystemFx.InitiateBlackMirror();
                     Console.WriteLine("[System] Environment scan initialized");
                     assistant.Log("Environment scan initialized");
                     break;
 
                 case "fix me":
+                    Cara.Fx.Panes.Recover();
                     Cara.Fx.SystemFx.FixMe();
                     Console.WriteLine("[System] Guardian protocol executed");
                     assistant.Log("Guardian angel executed");
                     break;
 
                 case "schedule":
+                    Cara.Fx.Panes.Time();
                     assistant.ShowScheduleHelp();
                     assistant.Log("Generated schedule help");
                     break;
 
                 case "help":
+                    Cara.Fx.Panes.Index();
                     assistant.ShowHelp();
                     assistant.Log("Generated help");
                     break;
 
                 case "motto":
+                    Cara.Fx.Panes.Voice();
                     assistant.GiveMotto();
                     assistant.Log("Generated motto");
                     break;
 
                 case "say":
+                    Cara.Fx.Panes.Voice();
                     assistant.Say();
                     assistant.Log("Generated say");
                     break;
@@ -131,17 +142,20 @@ internal static class Program
                     break;
 
                 case "sysinfo":
+                    Cara.Fx.Panes.Host();
                     Tools.SysInfo();
                     assistant.Log("sysinfo");
                     break;
 
                 case "clock":
                 case "worldclock":
+                    Cara.Fx.Panes.Time();
                     Tools.Clock();
                     assistant.Log("clock");
                     break;
 
                 case "genpass":
+                    Cara.Fx.Panes.Secure("genpass");
                     Tools.GenPass("");
                     assistant.Log("genpass");
                     break;

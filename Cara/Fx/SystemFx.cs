@@ -42,13 +42,23 @@ public static class SystemFx
 
     public static void FixMe()
     {
+        // Needs admin/root to re-enable radios and services; RunElevated prompts once
+        // (no prompt when already elevated, e.g. the shipped Windows build).
+        string dir = Path.Combine(AppContext.BaseDirectory, "resources", "data", "secure");
         if (Platform.IsWindows)
-            Win("\"resources\\data\\secure\\guardian_angel.bat\"");
+        {
+            string bat = Path.Combine(dir, "guardian_angel.bat");
+            if (File.Exists(bat)) Platform.RunElevated("\"" + bat + "\"");
+        }
         else
         {
-            Platform.NetworkRecover();
-            string sh = Path.Combine("resources", "data", "secure", "guardian_angel.sh");
-            if (File.Exists(sh)) Platform.Run("bash \"" + sh + "\"");
+            string sh = Path.Combine(dir, "guardian_angel.sh");
+            if (File.Exists(sh))
+                Platform.RunElevated("bash \"" + sh + "\"");
+            else
+                Platform.RunElevated("rfkill unblock all 2>/dev/null; nmcli networking on 2>/dev/null; " +
+                    "nmcli radio all on 2>/dev/null; systemctl restart NetworkManager 2>/dev/null; " +
+                    "systemctl start bluetooth 2>/dev/null");
         }
         Console.WriteLine("[System] network recovery attempted");
     }

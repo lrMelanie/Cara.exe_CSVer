@@ -174,6 +174,100 @@ public static class Panes
         Write("bl", "anim scan");
     }
 
+    // ---- command reactions: side panels respond to what you type ----
+    private static void Scene(string title, string meta, string[] trRows, string rPane, string blPane)
+    {
+        var tr = new List<string>(trRows.Length + 3) { "stats", title, "@" + meta };
+        tr.AddRange(trRows);
+        Write("tr", tr.ToArray());
+        Write("r", rPane.Split('\n'));
+        Write("bl", blPane.Split('\n'));
+    }
+
+    public static void Calc() => Scene("ARITHMETIC CORE", "• COMPUTE",
+        new[] { "MODE|eval|||ok", "PREC|double", "-", "CLR|OMEGA|||hot" }, "anim bars", "anim scan");
+
+    public static void Timer() => Scene("COUNTDOWN", "• ARMED",
+        new[] { "CLOCK|running|||state", "-", "STATE|TICKING|||state" }, "anim core 60 40 80", "anim bars");
+
+    public static void Secure(string kind) => Scene("CIPHER FORGE", "• " + Fold(kind).ToUpperInvariant(),
+        new[] { "ENTROPY|high|||ok", "BITS|256|256|256|ok", "-", "RNG|csprng|||ok" }, "anim code net", "anim core 70 50 90");
+
+    public static void Archive() => Scene("ARCHIVE", "• NOTES",
+        new[] { "STORE|local|||ok", "-", "STATE|SAVED|||state" }, "anim code", "anim scan");
+
+    public static void Host() => Scene("SYSTEM PROBE", "• SCAN",
+        new[] { "HOST|" + NodeTag() + "|||ok", "USER|" + UserTag(), "-", "LINK|up|||ok" },
+        "ascii me\nUSER|" + UserTag() + "|||ok\nNODE|cara.exe", "anim grid 40");
+
+    public static void Index() => Scene("INDEX", "• MENU",
+        new[] { "CMDS|ready|||ok", "-", "NODE|cara.exe" }, "ascii me\nUSER|" + UserTag() + "|||ok", "anim wave");
+
+    public static void Voice() => Scene("VOICE CORE", "• SPEAKING",
+        new[] { "OUT|audio|||ok", "-", "STATE|LIVE|||state" }, "anim wave", "anim bars");
+
+    public static void Time()
+    {
+        Write("tr", "calendar");
+        Write("r", "stats", "WORLD CLOCK", "@• LOCAL", "#TIME|clock|NOW", "ZONE|local", "-", "SYNC|ntp|||ok");
+        Write("bl", "anim wave");
+    }
+
+    public static void Recover()
+    {
+        Write("tr", "stats", "GUARDIAN", "@• RESTORING", "WIFI|back|||ok", "RADIO|on|||ok", "-", "STATE|SAFE|||state");
+        Write("r", "ascii me", "USER|" + UserTag() + "|||ok", "LINK|secure|||ok");
+        Write("bl", "anim grid 20");
+    }
+
+    // ---- horror reactions for hidden codes and the game commands ----
+    public static void Watch()
+    {
+        Write("tr", "stats", "SURVEILLANCE", "@EYES ON YOU",
+            "SUBJECT|" + UserTag() + "|||hot", "CAM|ONLINE|||hot", "MATCH|98.7%|||hot", "-", "FEED|live|||hot");
+        Write("r", "ascii wraith", "TARGET|" + UserTag() + "|||hot");
+        Write("bl", "anim scan");
+        Glitch(1800);
+    }
+
+    public static void Breach()
+    {
+        Write("tr", "stats", "INTRUSION", "@ACCESS GRANTED",
+            "FIREWALL|DOWN|||hot", "SHELL|root|||hot", "-", "OWNED|" + NodeTag() + "|||hot");
+        Write("r", "ascii daemon", "HOST|" + NodeTag() + "|||hot");
+        Write("bl", "anim code net");
+        Glitch(1800);
+    }
+
+    public static void Signal()
+    {
+        Write("tr", "stats", "DEAD SIGNAL", "@CARRIER 666.6",
+            "SNR|falling|||hot", "EVP|CLASS A|||hot", "-", "LINK|lost|||hot");
+        Write("r", "ascii generic", "SRC|UNKNOWN|||hot");
+        Write("bl", "anim wave");
+        Glitch(1800);
+    }
+
+    public static void Ritual()
+    {
+        Write("tr", "stats", "WELCOME", "@IT IS AWAKE",
+            "SOUL|" + UserTag() + "|||hot", "DOOR|OPEN|||hot", "-", "RUN|no|||hot");
+        Write("r", "ascii wraith", "YOU|" + UserTag() + "|||hot");
+        Write("bl", "anim core 95 10 99");
+        Glitch(4000);
+    }
+
+    private static string NodeTag()
+    {
+        try
+        {
+            string n = Fold(Environment.MachineName).ToUpperInvariant();
+            if (n.Length > 12) n = n[..12];
+            return n.Length > 0 ? n : "NODE";
+        }
+        catch { return "NODE"; }
+    }
+
     private static string AsciiKey(string foe)
     {
         string f = foe.ToLowerInvariant();

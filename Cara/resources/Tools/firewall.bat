@@ -1,27 +1,44 @@
 @echo off
-color F0
+setlocal enabledelayedexpansion
+color 0F
 title Firewall Bypass Toolkit
 
-set "chars=\ / | -"
+set "U=%USERNAME%"
+set "H=%COMPUTERNAME%"
+set "IP="
+for /f "tokens=2 delims=:" %%a in ('ipconfig ^| findstr /c:"IPv4"') do if not defined IP set "IP=%%a"
+if defined IP set "IP=%IP: =%"
+if not defined IP ( set /a "o=!random! %% 254 + 1" & set "IP=192.168.1.!o!" )
 
-for /f %%A in ('powershell -Command "[System.Windows.Forms.Screen]::PrimaryScreen.Bounds.Width"') do set "width=%%A"
-for /f %%A in ('powershell -Command "[System.Windows.Forms.Screen]::PrimaryScreen.Bounds.Height"') do set "height=%%A"
-
-if "%width%"=="" set "width=1920"
-if "%height%"=="" set "height=1080"
-
-set /a maxX=width-500
-set /a maxY=height-300
-if %maxX% lss 1 set "maxX=1"
-if %maxY% lss 1 set "maxY=1"
-
-powershell -Command "Add-Type -TypeDefinition 'using System;using System.Runtime.InteropServices;using System.Diagnostics;public class WinMover{[DllImport(\"user32.dll\")]public static extern bool MoveWindow(IntPtr hWnd,int X,int Y,int W,int H,bool bRepaint);public static void MoveMyWindow(int maxX,int maxY){IntPtr h=Process.GetCurrentProcess().MainWindowHandle;Random r=new Random();MoveWindow(h,r.Next(0,maxX),r.Next(0,maxY),500,300,true);}}';[WinMover]::MoveMyWindow(%maxX%,%maxY%)"
-
-
-:spin
-for %%c in (%chars%) do (
-    echo                 %%c%%c%%c%%c%%c%%c%%c%%c
-    ping -n 1 localhost >nul
-    cls
+cls
+echo   FIREWALL BYPASS TOOLKIT
+echo.
+echo   ^> target ... %H% (%IP%)
+echo   ^> operator . %U%
+echo.
+ping -n 2 127.0.0.1 >nul
+for %%p in (22 80 443 445 3389 5900 8080 31337) do (
+  <nul set /p "=   scanning port %%p ..."
+  ping -n 1 127.0.0.1 >nul
+  set /a "s=!random! %% 3"
+  if !s!==0 ( echo  OPEN ) else ( echo  filtered )
 )
-goto spin
+ping -n 2 127.0.0.1 >nul
+echo   disabling firewall rules .....
+ping -n 2 127.0.0.1 >nul
+echo   FIREWALL DOWN
+powershell -c "[console]::beep(300,250)" >nul 2>&1
+echo   shell acquired on %H%.
+ping -n 2 127.0.0.1 >nul
+echo.
+
+:loop
+set /a "r=!random! %% 6"
+if !r!==0 ( echo   %U%@%H%:~$ whoami & ping -n 1 127.0.0.1 >nul & echo     root )
+if !r!==1 ( set /a "a=!random! %% 223 + 1" & set /a "b=!random! %% 256" & set /a "c=!random! %% 256" & set /a "pt=!random! %% 60000 + 1024" & echo   [tcp] %IP%:!pt! -^> !a!.!b!.!c!:443  ESTABLISHED )
+if !r!==2 ( set /a "kb=!random! %% 4096" & echo   keylogger armed. buffer: !kb! bytes )
+if !r!==3 ( echo   %U%@%H%:~$ type C:\Windows\System32\config\SAM & echo     permission granted. & powershell -c "[console]::beep(200,200)" >nul 2>&1 )
+if !r!==4 ( set /a "n=!random! %% 99" & echo   persistence installed: HKCU\...\Run\.sys!n! )
+if !r!==5 ( echo   we own %H% now, %U%. & powershell -c "[console]::beep(120,400)" >nul 2>&1 )
+ping -n 2 127.0.0.1 >nul
+goto loop
