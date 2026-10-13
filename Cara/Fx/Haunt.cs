@@ -46,6 +46,7 @@ public static class Haunt
             string path = Path.Combine(ToolsDir, batName);
             if (!File.Exists(path)) return;
             Process.Start(new ProcessStartInfo("cmd.exe", $"/c start \"\" \"{path}\"") { UseShellExecute = false });
+            Panes.Glitch(1500);
         }
         catch { }
     }

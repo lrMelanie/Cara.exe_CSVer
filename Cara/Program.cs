@@ -16,11 +16,13 @@ internal static class Program
         try { Console.InputEncoding = Encoding.UTF8; } catch { }
         EnableVirtualTerminal();
 
-        // spawned side pane (code wall / node scan) during the hacker boot
+        // satellite window (--pane <slot> <dir> <parentPid>): renders from files
         if (args.Length >= 2 && args[0] == "--pane")
         {
-            int col = args.Length > 2 && int.TryParse(args[2], out int c) ? c : 1;
-            Cara.Fx.BootPanes.RunPane(args[1], col);
+            string slot = args[1];
+            string dir = args.Length > 2 ? args[2] : "";
+            int ppid = args.Length > 3 && int.TryParse(args[3], out int pp) ? pp : 0;
+            Cara.Fx.Panes.RunPane(slot, dir, ppid);
             return;
         }
 
@@ -28,7 +30,8 @@ internal static class Program
 
         var assistant = new Assistant();
 
-        Cara.Fx.BootPanes.LaunchHackerBoot();
+        Cara.Fx.Panes.Start();
+        Loader.ShowLoading();
         Console.Clear();
         ShowLogotype();
         Thread.Sleep(600);
@@ -122,6 +125,7 @@ internal static class Program
                 case "minigame":
                     assistant.Log("Launching minigame");
                     Cara.Minigames.MinigameMenu.Run();
+                    Cara.Fx.Panes.Idle();
                     ShowLogotype();
                     assistant.ShowHelp();
                     break;
@@ -154,6 +158,7 @@ internal static class Program
                     assistant.Log("Exit...");
                     if (assistant.Exit())
                     {
+                        Cara.Fx.Panes.Stop();
                         Console.WriteLine("Goodbye!");
                         return;
                     }

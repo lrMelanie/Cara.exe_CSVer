@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Cara")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+688c67767102288edbb15bbaf3d514bc90cc3f9e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3e5ab0445494bbd76a778c4449c11af020eca361")]
 [assembly: System.Reflection.AssemblyProductAttribute("Cara")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Cara")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -10,6 +10,7 @@ public static class MinigameMenu
         EnableVt();
         while (true)
         {
+            Cara.Fx.Panes.Terminal();
             Cls(); HideCur();
             Console.Write(Grn);
             Console.WriteLine(Hline("╔", "╗"));

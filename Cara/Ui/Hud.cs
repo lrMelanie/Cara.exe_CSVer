@@ -4,8 +4,7 @@ using static Cara.Ui.ConsoleUi;
 
 namespace Cara.Ui;
 
-/// Live single-window multi-panel desktop (clock / calendar / countdown /
-/// numbers / run-log), in the spirit of the hacker-desktop screenshot.
+/// Live multi-panel desktop (clock, calendar, countdown, numbers, run-log).
 public static class Hud
 {
     private const int PanelW = 36;   // one column

@@ -264,6 +264,7 @@ public sealed class CodeRunner
     // redraw from top (no flicker); typed chars green on match, red on typo
     private void RenderTyping(int rem, int max, List<string> lines, int cur, string typed, string target)
     {
+        Cara.Fx.Panes.CodeRunner(_points, _linesToType, _highScore);
         var o = new StringBuilder();
         o.Append("\x1b[H");
         string info = "  PTS " + _points + "    LVL " + _linesToType + "    BEST " + _highScore;
@@ -410,6 +411,7 @@ public sealed class CodeRunner
                         if (gained < 0) gained = 0;
                         string bs = gained.ToString("0.#", System.Globalization.CultureInfo.InvariantCulture);
                         Console.Write(Grn2 + "   [GRANTED] segment accepted  +" + bs + "s" + Rst);
+                        Cara.Fx.Panes.Glitch(200);
                         Thread.Sleep(180);
                     }
                     else

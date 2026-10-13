@@ -198,7 +198,7 @@ public static class SystemFx
         Run("color 07");
     }
 
-    // ---- native -------------------------------------------------------------
+    // native
 
     [StructLayout(LayoutKind.Sequential)]
     private struct COORD { public short X, Y; }

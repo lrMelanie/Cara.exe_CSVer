@@ -138,7 +138,7 @@ public sealed class Assistant
         return false;
     }
 
-    // ---- scheduling ---------------------------------------------------------
+    // scheduling
 
     public void ProcessScheduleCommand(string args)
     {

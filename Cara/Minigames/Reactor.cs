@@ -119,6 +119,7 @@ public sealed class Reactor
 
             if (temp >= 100)
             {
+                Cara.Fx.Panes.Glitch(2000);
                 Cls(); HideCur();
                 Console.Write(Red + Bold);
                 Console.WriteLine(Hline("╔", "╗"));
@@ -170,6 +171,7 @@ public sealed class Reactor
         int ti = (int)temp, ci = (int)coolant, ri = 100 - rods;
         string tcol = temp < 50 ? Grn : temp < 80 ? Yel : Red;
         string status = temp < 50 ? "NOMINAL" : temp < 80 ? "RISING" : temp < 95 ? "CRITICAL" : "MELTDOWN IMMINENT";
+        Cara.Fx.Panes.Reactor(ti, ci, ri, status);
 
         var sb = new System.Text.StringBuilder();
         sb.Append("\x1b[H");

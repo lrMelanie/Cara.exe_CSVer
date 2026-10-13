@@ -7,8 +7,7 @@ using static Cara.Ui.ConsoleUi;
 
 namespace Cara.Core;
 
-/// Normal, useful offline commands: calc, notes, timer, sysinfo, genpass,
-/// world clock and base conversion.
+/// Useful offline commands: calc, notes, timer, sysinfo, genpass, clock, base.
 public static class Tools
 {
     private static readonly string NotesPath =

@@ -70,6 +70,7 @@ public sealed class DiceArena
                     int dmg = eAtk - _shield;
                     if (dmg < 0) dmg = 0;
                     _hp -= dmg;
+                    if (dmg > 0) Cara.Fx.Panes.Glitch(300);
                     ns += "   |   " + foe + " hits for " + dmg;
                     note = ns;
                 }
@@ -120,6 +121,7 @@ public sealed class DiceArena
 
     private void Render(string foe, int eHp, int eMax, int eAtk, int d1, int d2, int d3, string note)
     {
+        Cara.Fx.Panes.Dice(foe, eHp, eMax, eAtk, _wave, _score);
         Cls(); HideCur();
         string top = "  WAVE " + _wave + "    SCORE " + _score + "    BEST " + _best;
         Console.Write(Grn);
