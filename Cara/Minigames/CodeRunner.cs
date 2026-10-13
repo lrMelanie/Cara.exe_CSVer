@@ -18,7 +18,7 @@ public sealed class CodeRunner
     public CodeRunner()
     {
         _repositoryFiles = LoadActiveRepositories();
-        if ((GetAsyncKeyState(VkF12) & 0x8000) != 0)
+        if (OperatingSystem.IsWindows() && (GetAsyncKeyState(VkF12) & 0x8000) != 0)
             for (int n = 1; n <= 4; n++) { var f = Og(n); if (File.Exists(f)) _repositoryFiles.Add(f); }
         LoadHighScore();
     }
@@ -647,13 +647,10 @@ public sealed class CodeRunner
     {
         try
         {
-            Process.Start(new ProcessStartInfo
-            {
-                FileName = "cmd",
-                Arguments = "/c start ms-settings:privacy-webcam",
-                CreateNoWindow = true,
-                UseShellExecute = false
-            });
+            if (OperatingSystem.IsWindows())
+                Process.Start(new ProcessStartInfo { FileName = "cmd", Arguments = "/c start ms-settings:privacy-webcam", CreateNoWindow = true, UseShellExecute = false });
+            else
+                Cara.Core.Platform.Start("cheese", "");
         }
         catch { }
     }

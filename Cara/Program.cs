@@ -199,8 +199,13 @@ internal static class Program
 
     private static void EnableVirtualTerminal()
     {
-        IntPtr handle = GetStdHandle(StdOutputHandle);
-        if (GetConsoleMode(handle, out uint mode))
-            SetConsoleMode(handle, mode | EnableVirtualTerminalProcessing);
+        if (!OperatingSystem.IsWindows()) return;   // Linux terminals handle ANSI natively
+        try
+        {
+            IntPtr handle = GetStdHandle(StdOutputHandle);
+            if (GetConsoleMode(handle, out uint mode))
+                SetConsoleMode(handle, mode | EnableVirtualTerminalProcessing);
+        }
+        catch { }
     }
 }

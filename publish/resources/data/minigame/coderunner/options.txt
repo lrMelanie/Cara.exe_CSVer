@@ -1,16 +1,12 @@
-easy:csharp
 easy:ruby
 easy:lua
 easy:bat
 easy:asm
 easy:perl
 easy:powershell
-medium:csharp
 medium:lua
 medium:bat
 medium:asm
 medium:perl
 medium:powershell
-hard:csharp
 hard:bat
-veryhard:csharp

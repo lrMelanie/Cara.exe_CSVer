@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using Cara.Core;
 
 namespace Cara.Fx;
 
@@ -43,9 +44,18 @@ public static class Haunt
     {
         try
         {
-            string path = Path.Combine(ToolsDir, batName);
-            if (!File.Exists(path)) return;
-            Process.Start(new ProcessStartInfo("cmd.exe", $"/c start \"\" \"{path}\"") { UseShellExecute = false });
+            if (Platform.IsWindows)
+            {
+                string path = Path.Combine(ToolsDir, batName);
+                if (!File.Exists(path)) return;
+                Process.Start(new ProcessStartInfo("cmd.exe", $"/c start \"\" \"{path}\"") { UseShellExecute = false });
+            }
+            else
+            {
+                string sh = Path.Combine(ToolsDir, Path.GetFileNameWithoutExtension(batName) + ".sh");
+                if (File.Exists(sh))
+                    Platform.SpawnTerminal("CARA::" + Path.GetFileNameWithoutExtension(batName).ToUpperInvariant(), "bash \"" + sh + "\"");
+            }
             Panes.Glitch(1500);
         }
         catch { }

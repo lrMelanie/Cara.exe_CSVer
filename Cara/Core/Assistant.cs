@@ -95,7 +95,7 @@ public sealed class Assistant
         }
         if (bag.Count == 0)
         {
-            if (motto && _mottoCycled)
+            if (motto && _mottoCycled && Platform.IsWindows)
                 try { Process.Start(new ProcessStartInfo("cmd.exe", "/c start /MIN cmd /c \"echo F24\"") { UseShellExecute = false }); }
                 catch { }
             if (motto) _mottoCycled = true;
@@ -131,8 +131,7 @@ public sealed class Assistant
         string? confirmation = Console.ReadLine();
         if (string.Equals(confirmation, "yes", StringComparison.OrdinalIgnoreCase))
         {
-            try { Process.Start(new ProcessStartInfo("cmd.exe", "/c shutdown /s /t 10") { UseShellExecute = false })?.WaitForExit(); }
-            catch { }
+            Platform.Shutdown(10);
             return true;
         }
         return false;
@@ -210,7 +209,7 @@ public sealed class Assistant
     {
         while (_reminderActive)
         {
-            if ((GetAsyncKeyState(VkScroll) & 0x8000) != 0)
+            if (OperatingSystem.IsWindows() && (GetAsyncKeyState(VkScroll) & 0x8000) != 0)
             {
                 keybd_event(VkNumlock, 0, 0, UIntPtr.Zero);
                 keybd_event(VkNumlock, 0, KeyeventfKeyup, UIntPtr.Zero);

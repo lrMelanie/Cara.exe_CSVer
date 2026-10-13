@@ -1,7 +1,9 @@
 using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
 using System.Text;
+using Cara.Core;
 using static Cara.Ui.ConsoleUi;
 
 namespace Cara.Fx;
@@ -25,27 +27,64 @@ public static class Panes
             if (exe == null
                 || exe.EndsWith("dotnet", StringComparison.OrdinalIgnoreCase)
                 || exe.EndsWith("dotnet.exe", StringComparison.OrdinalIgnoreCase)) return;
-            int sw = GetSystemMetrics(0), sh = GetSystemMetrics(1);
-            if (sw <= 0 || sh <= 0) return;
 
             _dir = Path.Combine(Path.GetTempPath(), "cara_panes_" + Environment.ProcessId);
             Directory.CreateDirectory(_dir);
             int ppid = Environment.ProcessId;
-            foreach (string slot in SlotIds)
-            {
-                try
-                {
-                    var p = Process.Start(new ProcessStartInfo(exe, $"--pane {slot} \"{_dir}\" {ppid}") { UseShellExecute = true });
-                    if (p != null) _kids.Add(p);
-                }
-                catch { }
-            }
+
+            if (OperatingSystem.IsWindows()) StartWindows(exe, ppid);
+            else StartLinux(exe, ppid);
+
             Active = _kids.Count > 0;
-            if (Active) { try { MoveWindow(GetConsoleWindow(), sw / 4, sh / 6, sw / 2, sh * 2 / 3, true); } catch { } Idle(); }
-            else TryCleanup();
+            if (Active) Idle(); else TryCleanup();
         }
         catch { Active = false; }
     }
+
+    [SupportedOSPlatform("windows")]
+    private static void StartWindows(string exe, int ppid)
+    {
+        int sw = GetSystemMetrics(0), sh = GetSystemMetrics(1);
+        if (sw <= 0 || sh <= 0) return;
+        foreach (string slot in SlotIds)
+        {
+            try
+            {
+                var p = Process.Start(new ProcessStartInfo(exe, $"--pane {slot} \"{_dir}\" {ppid}") { UseShellExecute = true });
+                if (p != null) _kids.Add(p);
+            }
+            catch { }
+        }
+        if (_kids.Count > 0) try { MoveWindow(GetConsoleWindow(), sw / 4, sh / 6, sw / 2, sh * 2 / 3, true); } catch { }
+    }
+
+    private static void StartLinux(string exe, int ppid)
+    {
+        var (sw, sh) = Platform.ScreenSize();
+        foreach (string slot in SlotIds)
+        {
+            string title = "CARA::" + slot.ToUpperInvariant();
+            string cmd = "\"" + exe + "\" --pane " + slot + " \"" + _dir + "\" " + ppid;
+            var p = Platform.SpawnTerminal(title, cmd);
+            if (p != null) _kids.Add(p);
+        }
+        if (_kids.Count > 0)
+        {
+            Thread.Sleep(700);
+            foreach (string slot in SlotIds)
+            {
+                var (x, y, w, h) = LinuxRect(slot, sw, sh);
+                Platform.MoveWindowByTitle("CARA::" + slot.ToUpperInvariant(), x, y, w, h);
+            }
+        }
+    }
+
+    private static (int x, int y, int w, int h) LinuxRect(string slot, int sw, int sh) => slot switch
+    {
+        "tr" => (sw * 2 / 3, 0, sw / 3, sh / 2),
+        "bl" => (0, sh / 2, sw / 3, sh / 2),
+        _ => (sw * 2 / 3, sh / 2, sw / 3, sh / 2),
+    };
 
     public static void Stop()
     {
@@ -288,7 +327,7 @@ public static class Panes
         try { Console.OutputEncoding = Encoding.UTF8; } catch { }
         EnableVt(); HideCur();
         try { Console.Title = "CARA::" + slot.ToUpperInvariant(); } catch { }
-        try { PositionSelf(slot); } catch { }
+        if (OperatingSystem.IsWindows()) { try { PositionSelf(slot); } catch { } }
         try { Console.Write("\x1b[?1049h\x1b[?7l\x1b[2J"); } catch { }
         _paneStart = DateTime.Now;
 
@@ -1036,6 +1075,7 @@ public static class Panes
     private static int SafeW() { try { return Math.Clamp(Console.WindowWidth, 10, 200); } catch { return 40; } }
     private static int SafeH() { try { return Math.Clamp(Console.WindowHeight, 6, 60); } catch { return 20; } }
 
+    [SupportedOSPlatform("windows")]
     private static void PositionSelf(string slot)
     {
         IntPtr hwnd = GetConsoleWindow();

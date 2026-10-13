@@ -70,9 +70,14 @@ public static class ConsoleUi
 
     public static void EnableVt()
     {
-        IntPtr handle = GetStdHandle(-11);
-        if (GetConsoleMode(handle, out uint mode))
-            SetConsoleMode(handle, mode | 0x0004);
+        if (!OperatingSystem.IsWindows()) return;   // Linux terminals handle ANSI natively
+        try
+        {
+            IntPtr handle = GetStdHandle(-11);
+            if (GetConsoleMode(handle, out uint mode))
+                SetConsoleMode(handle, mode | 0x0004);
+        }
+        catch { }
     }
 
     [DllImport("kernel32.dll", SetLastError = true)]

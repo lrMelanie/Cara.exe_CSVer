@@ -1,25 +1,18 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
 using System.Text;
+using Cara.Core;
 
 namespace Cara.Fx;
 
-/// System horror/hacker routines ported 1:1 from main.cpp (really touch the machine).
+/// System horror/hacker routines. Windows and Linux both "really touch the machine".
 public static class SystemFx
 {
     private static readonly Random Rng = new();
 
-    // Equivalent of C's system(): run a command through cmd.exe and wait.
-    private static int Run(string command)
-    {
-        try
-        {
-            using var p = Process.Start(new ProcessStartInfo("cmd.exe", "/c " + command) { UseShellExecute = false });
-            p!.WaitForExit();
-            return p.ExitCode;
-        }
-        catch { return -1; }
-    }
+    // Windows-only cmd command (netsh / powershell / registry). No-op on Linux.
+    private static int Win(string command) => Platform.IsWindows ? Platform.Run(command) : 0;
 
     private static void AppendLog(string path, string line)
     {
@@ -32,7 +25,8 @@ public static class SystemFx
         catch { }
     }
 
-    private static bool FileExists(string path) => File.Exists(path);
+    private static void Color(string ansi) { try { Console.Write(ansi); } catch { } }
+    private const string CReset = "\x1b[0m", CRed = "\x1b[38;5;196m", CGrn = "\x1b[38;5;46m", CWhite = "\x1b[38;5;231m";
 
     public static void ExecuteWelcomeSequence()
     {
@@ -43,89 +37,79 @@ public static class SystemFx
         Cara.Minigames.MinigameMenu.Run();
 
         Console.WriteLine("[System] All systems engaged. Game parameters initialized.");
-        Run("start https://www.youtube.com/watch?v=dQw4w9WgXcQ");
+        Platform.OpenUrl("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
     }
 
-    public static void FixMe() => Run("\"resources\\data\\secure\\guardian_angel.bat\"");
+    public static void FixMe()
+    {
+        if (Platform.IsWindows)
+            Win("\"resources\\data\\secure\\guardian_angel.bat\"");
+        else
+        {
+            Platform.NetworkRecover();
+            string sh = Path.Combine("resources", "data", "secure", "guardian_angel.sh");
+            if (File.Exists(sh)) Platform.Run("bash \"" + sh + "\"");
+        }
+        Console.WriteLine("[System] network recovery attempted");
+    }
 
     public static void EnableAirplaneMode()
     {
         const string log = "resources/logs/airplane_log.txt";
-
-        int regResult = Run("powershell -Command \"Try {   $regPath = 'HKLM:/SYSTEM/CurrentControlSet/Control/RadioManagement/SystemRadioState';   if (-not (Test-Path $regPath)) { New-Item -Path $regPath -Force | Out-Null };   Set-ItemProperty -Path $regPath -Name 'SystemRadioState' -Value 1 -Force -ErrorAction Stop;   Write-Output '[SUCCESS] Registry updated';   Exit 0;} Catch {   Write-Output ('[ERROR] ' + $_.Exception.Message);   Exit 1;}\"");
-        AppendLog(log, "Registry update result: " + regResult);
-
-        foreach (var iface in new[] { "Wi-Fi", "Bluetooth Network Connection", "Ethernet" })
+        if (Platform.IsWindows)
         {
-            int r = Run($"netsh interface set interface \"{iface}\" admin=disable");
-            AppendLog(log, iface + " disable: " + r);
+            int regResult = Win("powershell -Command \"Try {   $regPath = 'HKLM:/SYSTEM/CurrentControlSet/Control/RadioManagement/SystemRadioState';   if (-not (Test-Path $regPath)) { New-Item -Path $regPath -Force | Out-Null };   Set-ItemProperty -Path $regPath -Name 'SystemRadioState' -Value 1 -Force -ErrorAction Stop;   Write-Output '[SUCCESS] Registry updated';   Exit 0;} Catch {   Write-Output ('[ERROR] ' + $_.Exception.Message);   Exit 1;}\"");
+            AppendLog(log, "Registry update result: " + regResult);
+            foreach (var iface in new[] { "Wi-Fi", "Bluetooth Network Connection", "Ethernet" })
+                AppendLog(log, iface + " disable: " + Win($"netsh interface set interface \"{iface}\" admin=disable"));
+            Win("powershell -Command \"Get-Service -Name 'WlanSvc', 'BthServ' | Stop-Service -Force -PassThru -ErrorAction SilentlyContinue | Set-Service -StartupType Disabled -PassThru | Out-File -Append resources/logs/airplane_log.txt\"");
         }
-
-        Run("powershell -Command \"Get-Service -Name 'WlanSvc', 'BthServ' | Stop-Service -Force -PassThru -ErrorAction SilentlyContinue | Set-Service -StartupType Disabled -PassThru | Out-File -Append resources/logs/airplane_log.txt\"");
+        else
+        {
+            Platform.RadioOff();
+            AppendLog(log, "rfkill block all (airplane mode)");
+        }
     }
 
     public static void ActivateBluetooth()
     {
-        const string devconPath = "resources/Tools/devcon.exe";
-        string toolPath = "\"" + devconPath + "\"";
         const string log = "resources/logs/bluetooth_log.txt";
-
-        if (!FileExists(devconPath))
+        if (Platform.IsWindows)
         {
-            AppendLog(log, "ERROR: devcon.exe not found at: " + toolPath);
-            return;
+            const string devconPath = "resources/Tools/devcon.exe";
+            string toolPath = "\"" + devconPath + "\"";
+            if (!File.Exists(devconPath)) { AppendLog(log, "ERROR: devcon.exe not found at: " + toolPath); return; }
+            var commands = new[]
+            {
+                toolPath + " enable *DEV_0A12*",
+                toolPath + " enable *USB\\VID_0A12*",
+                toolPath + " rescan",
+                "powershell -Command \"Start-Service -Name 'BthServ' -ErrorAction SilentlyContinue;Start-Service -Name 'BTAGService' -ErrorAction SilentlyContinue;Start-Sleep -Seconds 3;Add-BluetoothDevice -Name '*' -ErrorAction SilentlyContinue | Out-File -Append " + log + "\"",
+            };
+            foreach (var cmd in commands) { AppendLog(log, "Executing: " + cmd); AppendLog(log, "Result: " + Win(cmd)); }
+            Win("netsh interface set interface \"Bluetooth Network Connection\" admin=enable");
         }
-
-        var commands = new[]
+        else
         {
-            toolPath + " enable *DEV_0A12*",
-            toolPath + " enable *USB\\VID_0A12*",
-            toolPath + " rescan",
-            "powershell -Command \"Start-Service -Name 'BthServ' -ErrorAction SilentlyContinue;Start-Service -Name 'BTAGService' -ErrorAction SilentlyContinue;Start-Sleep -Seconds 3;Add-BluetoothDevice -Name '*' -ErrorAction SilentlyContinue | Out-File -Append " + log + "\""
-        };
-
-        foreach (var cmd in commands)
-        {
-            AppendLog(log, "Executing: " + cmd);
-            int r = Run(cmd);
-            AppendLog(log, "Result: " + r);
+            Platform.BluetoothOn();
+            AppendLog(log, "rfkill unblock bluetooth + start bluetooth.service");
         }
-
-        Run("netsh interface set interface \"Bluetooth Network Connection\" admin=enable");
-    }
-
-    private static void PlayMp3(string filename)
-    {
-        mciSendStringA("close mp3file", null, 0, IntPtr.Zero);
-        int err = mciSendStringA($"open \"{filename}\" type mpegvideo alias mp3file", null, 0, IntPtr.Zero);
-        if (err != 0) { ShowMciError(err); return; }
-        err = mciSendStringA("play mp3file repeat", null, 0, IntPtr.Zero);
-        if (err != 0) ShowMciError(err);
-    }
-
-    private static void ShowMciError(int err)
-    {
-        var buf = new StringBuilder(128);
-        mciGetErrorStringA(err, buf, buf.Capacity);
-        MessageBoxA(IntPtr.Zero, buf.ToString(), "Audio Error", 0x10);
     }
 
     private static void PlayCreepyAudio()
     {
-        const string soundPath = "resources/audio/c1337.mp3";
-        if (FileExists(soundPath))
+        string soundPath = Path.Combine("resources", "audio", "c1337.mp3");
+        if (File.Exists(soundPath))
         {
-            PlayMp3(soundPath);
-            mciSendStringA("status mp3file length", null, 0, IntPtr.Zero);
+            if (Platform.IsWindows) PlayMp3Windows(soundPath);
+            else Platform.PlayAudioLoop(soundPath);
         }
         else
         {
             for (int i = 0; i < 5; i++)
             {
-                Console.Beep(300 + i * 100, 200);
-                Run("color 0C");
-                Console.Beep(1500 - i * 100, 200);
-                Run("color 07");
+                Platform.Beep(300 + i * 100, 200); Color(CRed);
+                Platform.Beep(1500 - i * 100, 200); Color(CReset);
             }
         }
     }
@@ -134,24 +118,35 @@ public static class SystemFx
     {
         for (int i = 0; i < 5; i++)
         {
-            Run("color 0A"); Thread.Sleep(50);
-            Run("color 0C"); Thread.Sleep(50);
+            Color(CGrn); Thread.Sleep(50);
+            Color(CRed); Thread.Sleep(50);
         }
-        Run("color 07");
-        Run("netsh interface set interface \"Wi-Fi\" admin=disable");
-        Run("start microsoft.windows.camera:");
+        Color(CReset);
+
+        if (Platform.IsWindows)
+        {
+            Win("netsh interface set interface \"Wi-Fi\" admin=disable");
+            Platform.OpenUrl("microsoft.windows.camera:");
+        }
+        else
+        {
+            Platform.WifiOff();
+            if (Platform.Start("cheese", "") == null) Platform.Start("guvcview", "");
+        }
         Console.WriteLine("\n[!] Camera feed accessed");
         PlayCreepyAudio();
-        Run("powershell -Command \"(New-Object Media.SoundPlayer 'C:/Windows/Media/Windows Background.wav').PlaySync();\"");
+        if (Platform.IsWindows)
+            Win("powershell -Command \"(New-Object Media.SoundPlayer 'C:/Windows/Media/Windows Background.wav').PlaySync();\"");
 
         try
         {
-            File.WriteAllText("C:/Windows/Temp/location.log",
+            string loc = Path.Combine(Path.GetTempPath(), "location.log");
+            File.WriteAllText(loc,
                 "Last known coordinates:\n" +
-                "Latitude: 49.8178351179526° N\n" +
-                "Longitude: 19.05101757884222° E\n" +
+                "Latitude: 49.8178351179526 N\n" +
+                "Longitude: 19.05101757884222 E\n" +
                 "Timestamp: " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "\n" +
-                "Accuracy: ±3m\n" +
+                "Accuracy: +/-3m\n" +
                 "Source: GPS spoofing module\n");
         }
         catch { }
@@ -160,70 +155,63 @@ public static class SystemFx
     public static void TriggerPhantomProtocol()
     {
         for (int i = 1; i <= 16; i++)
-            Run("start https://void.domain/N0T-4-TR4P-" + i + "?seed=" + Environment.TickCount64);
+            Platform.OpenUrl("https://void.domain/N0T-4-TR4P-" + i + "?seed=" + Environment.TickCount64);
 
-        Run("start /B cmd /c \"timeout 37 && del /Q C:/Windows/Temp/*.log\"");
+        if (Platform.IsWindows)
+            Win("start /B cmd /c \"timeout 37 && del /Q C:/Windows/Temp/*.log\"");
+        else
+            Platform.RunDetached("(sleep 37 && rm -f \\\"$TMPDIR\\\"/*.log /tmp/*.log) >/dev/null 2>&1 &");
     }
 
     public static void InitiateBlackMirror()
     {
-        IntPtr hConsole = GetStdHandle(-11);
-        GetConsoleScreenBufferInfo(hConsole, out CONSOLE_SCREEN_BUFFER_INFO csbi);
-
         Console.Clear();
         Console.WriteLine("INITIALIZING SPECTRAL INTERFACE");
         for (int i = 0; i < 150; i++)
         {
-            SetConsoleTextAttribute(hConsole, (ushort)Rng.Next(0, 256));
-            if (i % 10 == 0) { Console.Clear(); Console.WriteLine("SYSTEM INTEGRITY COMPROMISED"); }
+            Color("\x1b[38;5;" + Rng.Next(0, 256) + "m");
+            if (i % 10 == 0) { Console.Clear(); Console.WriteLine(CRed + "SYSTEM INTEGRITY COMPROMISED" + CReset); }
             for (int j = 0; j < 80; j++) Console.Write((char)(Rng.Next(0, 94) + 33));
             Console.Write("\n");
-            Console.Beep(Rng.Next(37, 2037), 50);
+            Platform.Beep(Rng.Next(37, 2037), 50);
             if (i > 100) Thread.Sleep(10);
             else if (i > 50) Thread.Sleep(30);
             else Thread.Sleep(50);
         }
-
-        SetConsoleTextAttribute(hConsole, csbi.wAttributes);
+        Color(CReset);
         Console.Clear();
+
         EnableAirplaneMode();
         ActivateBluetooth();
-        Run("powershell -Command \"Try {   $state = Get-ItemPropertyValue 'HKLM:/SYSTEM/CurrentControlSet/Control/RadioManagement/SystemRadioState' -Name 'SystemRadioState';    if ($state -ne 1) { Write-Error 'Airplane mode failed!' }; } Catch {    Write-Error 'Verification failed: ' + $_.Exception.Message; }\"");
-        Run("color 0F");
+        if (Platform.IsWindows)
+            Win("powershell -Command \"Try {   $state = Get-ItemPropertyValue 'HKLM:/SYSTEM/CurrentControlSet/Control/RadioManagement/SystemRadioState' -Name 'SystemRadioState';    if ($state -ne 1) { Write-Error 'Airplane mode failed!' }; } Catch {    Write-Error 'Verification failed: ' + $_.Exception.Message; }\"");
+
         for (int i = 0; i < 3; i++)
         {
-            Run("color 0F"); Console.Beep(1500, 100);
-            Run("color 0"); Console.Beep(300, 100);
+            Color(CWhite); Platform.Beep(1500, 100);
+            Color("\x1b[38;5;16m"); Platform.Beep(300, 100);
         }
-        Run("color 07");
+        Color(CReset);
     }
 
-    // native
-
-    [StructLayout(LayoutKind.Sequential)]
-    private struct COORD { public short X, Y; }
-
-    [StructLayout(LayoutKind.Sequential)]
-    private struct SMALL_RECT { public short Left, Top, Right, Bottom; }
-
-    [StructLayout(LayoutKind.Sequential)]
-    private struct CONSOLE_SCREEN_BUFFER_INFO
+    // ---- Windows-only audio (winmm) ----
+    [SupportedOSPlatform("windows")]
+    private static void PlayMp3Windows(string filename)
     {
-        public COORD dwSize;
-        public COORD dwCursorPosition;
-        public ushort wAttributes;
-        public SMALL_RECT srWindow;
-        public COORD dwMaximumWindowSize;
+        mciSendStringA("close mp3file", null, 0, IntPtr.Zero);
+        int err = mciSendStringA($"open \"{filename}\" type mpegvideo alias mp3file", null, 0, IntPtr.Zero);
+        if (err != 0) { ShowMciError(err); return; }
+        err = mciSendStringA("play mp3file repeat", null, 0, IntPtr.Zero);
+        if (err != 0) ShowMciError(err);
     }
 
-    [DllImport("kernel32.dll")]
-    private static extern IntPtr GetStdHandle(int nStdHandle);
-
-    [DllImport("kernel32.dll")]
-    private static extern bool GetConsoleScreenBufferInfo(IntPtr hConsoleOutput, out CONSOLE_SCREEN_BUFFER_INFO info);
-
-    [DllImport("kernel32.dll")]
-    private static extern bool SetConsoleTextAttribute(IntPtr hConsoleOutput, ushort wAttributes);
+    [SupportedOSPlatform("windows")]
+    private static void ShowMciError(int err)
+    {
+        var buf = new StringBuilder(128);
+        mciGetErrorStringA(err, buf, buf.Capacity);
+        MessageBoxA(IntPtr.Zero, buf.ToString(), "Audio Error", 0x10);
+    }
 
     [DllImport("winmm.dll", CharSet = CharSet.Ansi)]
     private static extern int mciSendStringA(string command, StringBuilder? returnValue, int returnLength, IntPtr hwndCallback);

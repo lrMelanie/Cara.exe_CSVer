@@ -2,12 +2,16 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net8.0-windows</TargetFramework>
+    <TargetFrameworks>net8.0-windows;net8.0</TargetFrameworks>
     <RootNamespace>Cara</RootNamespace>
     <AssemblyName>Cara</AssemblyName>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <!-- Windows build auto-elevates via the manifest; the Linux (net8.0) build has none. -->
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net8.0-windows'">
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
 
